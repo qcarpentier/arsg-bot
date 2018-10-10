@@ -23,7 +23,7 @@ bot.on('guildMemberAdd', member => {
 });
 
 bot.on('messageReactionAdd', (reaction, user) => {
-	// console.log(`${user.username} reacted with ${reaction.emoji.name}`.yellow);
+	console.log(`${user.username} reacted with ${reaction.emoji.name}`.yellow);
 
 	// Variables
 	const message = reaction.message;
@@ -47,7 +47,7 @@ bot.on('messageReactionAdd', (reaction, user) => {
 // Basically the same as 'messageReactionAdd'
 // TODO: rework
 bot.on('messageReactionRemove', (reaction, user) => {
-	// console.log(`${user.username} unreacted with ${reaction.emoji.name}`.yellow);
+	console.log(`${user.username} unreacted with ${reaction.emoji.name}`.yellow);
 	const message = reaction.message;
 	if (message.channel.name !== 'read-me') return;
 	if (reaction.emoji.name !== '✅') return;
@@ -74,7 +74,7 @@ bot.on('message', msg => {
 	}
 	// Invite link
 	if (message.startsWith(prefix + 'invitelink')) {
-		channel.send('Invite link: https://discord.gg/y4vTKAR');
+		channel.send('Lien d\'invitation: https://discord.gg/y4vTKAR');
 	}
 	// Google Image
 	else if (message.startsWith(prefix + 'googleimg')) {
@@ -107,32 +107,46 @@ bot.on('message', msg => {
 		}
 	}
 	// Rules
-	// TODO: Rework > Add Rich Embed + specific checks to avoid troll numbers
+	// TODO: Rework > Add Rich Embed
 	if (message.startsWith(prefix + 'rule')) {
-		const ruleNumber = message.substr(message.length - 1);
+		// Remove prefix '!'
+		const ruleCommand = message.substr(1);
+		// Regex matching 4 words and one digit > 'rule1', 'rule2'...
+		const simpleRuleRegex = /^\w{4}\d{1}$/;
+		// Regex matching 5 words for 'rules'
+		const multipleRulesRegex = /^\w{5}$/;
+		// Get the last character
+		const lastCharacter = ruleCommand.substr(ruleCommand.length - 1);
 
-		switch (ruleNumber) {
-		case '1':
-			channel.send('**[1]** Écrivez dans un français correct, sans spam et sans flood.');
-			break;
-		case '2':
-			channel.send('**[2]** Respectez les autres élèves et leurs opinions.');
-			break;
-		case '3':
-			channel.send('**[3]** N\'envoyez pas de photo d\'un élève **sans son accord**, qu\'elle soit drôle ou non.');
-			break;
-		case '4':
-			channel.send('**[4]** L\'envoi de tout matériel nuisible, tel que les virus, est formellement interdit.');
-			break;
-		case '5':
-			channel.send('**[5]** Respectez la loi et la sensibilité d\'autrui (pas de piratage, de pornographie, de gore, etc.).');
-			break;
-		case 's':
+		// Check which rule is called (1 > 5)
+		if (simpleRuleRegex.test(ruleCommand) && parseInt(lastCharacter, 10) <= 5) {
+			switch (lastCharacter) {
+			case '1':
+				channel.send('**[1]** Écrivez dans un français correct, sans spam et sans flood.');
+				break;
+			case '2':
+				channel.send('**[2]** Respectez les autres élèves et leurs opinions.');
+				break;
+			case '3':
+				channel.send('**[3]** N\'envoyez pas de photo d\'un élève **sans son accord**, qu\'elle soit drôle ou non.');
+				break;
+			case '4':
+				channel.send('**[4]** L\'envoi de tout matériel nuisible, tel que les virus, est formellement interdit.');
+				break;
+			case '5':
+				channel.send('**[5]** Respectez la loi et la sensibilité d\'autrui (pas de piratage, de pornographie, de gore, etc.).');
+				break;
+			default:
+				break;
+			}
+		}
+		// Check if 'rules' is called
+		else if (multipleRulesRegex.test(ruleCommand) && lastCharacter == 's') {
 			channel.send('**[1]** Écrivez dans un français correct, sans spam et sans flood,\n**[2]** Respectez les autres élèves et leurs opinions,\n**[3]** N\'envoyez pas de photo d\'un élève **sans son accord**, qu\'elle soit drôle ou non,\n**[4]** L\'envoi de tout matériel nuisible, tel que les virus, est formellement interdit,\n**[5]** Respectez la loi et la sensibilité d\'autrui (pas de piratage, de pornographie, de gore, etc.).');
-			break;
-		default:
+		}
+		// Default message
+		else{
 			channel.send('Je ne suis qu\'un **Bot**! Je n\'ai pas encore l\'intelligence de créer mes propres règles. :pensive:');
-			break;
 		}
 	}
 });
