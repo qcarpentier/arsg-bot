@@ -67,6 +67,7 @@ bot.on('message', msg => {
 	// Variables
 	const message = msg.content.toLowerCase();
 	const channel = msg.channel;
+	const author = msg.author;
 
 	// Ping-Pong
 	if (message.startsWith(prefix + 'ping')) {
@@ -151,6 +152,7 @@ bot.on('message', msg => {
 	}
 	// Markdown cheatlist
 	else if (message.startsWith(prefix + 'markdown')) {
+		// Build the Markdown Rich Embed
 		const markdownEmbed = new Discord.RichEmbed()
 			.setTitle('Donnez un peu de vie à vos conversations quotidiennes!')
 			.setDescription('Le **Markdown** est un système de formatage qui vous aidera à faire ressortir vos phrases. Ajoutez juste quelques caractères autour votre texte et le tour est joué!')
@@ -166,7 +168,27 @@ bot.on('message', msg => {
 			.addField('`code`', '`` `code` ``')
 			.addField('```bloc \nde code \nde plusieurs lignes```', '` ```bloc \nde code \nde plusieurs lignes``` `')
 
-		channel.send(markdownEmbed);
+		// Send the Rich Embed as a private message to the user
+		author.send(markdownEmbed);
+		// Delete the command message
+		msg.delete();
+	}
+	else if (message.startsWith(prefix + 'help')) {
+		// Build the Help Rich Embed
+		const helpEmbed = new Discord.RichEmbed()
+			.setTitle('Besoin d\'aide? Vous pouvez toujours compter sur **l\'ARSG Bot!**')
+			.setDescription('Pour effectuer une **commande** sur le serveur, il vous suffit simplement de faire `!` suivi du nom de la commande:')
+			.setColor('#F8F096')
+			.addField('`!help`', 'Affiche **l\'aide** du serveur.')
+			.addField('`!rules`', 'Affiche les **règles générales** du serveur.')
+			.addField('`!markdown`', 'Affiche une liste détaillée sur le **Markdown**. (PS: va voir, c\'est stylé)')
+			.addField('`!google <recherche>`', 'Besoin de **rechercher** quelque chose? Ton meilleur pote Google est toujours là pour t\'épauler.')
+			.addField('`!googleimg <recherche>`', 'Besoin de **visualiser** quelque chose? Google Image sera toujours là pour toi.')
+		
+		// Send the Rich Embed as a private message to the user
+		author.send(helpEmbed);
+		// Delete the command message
+		msg.delete();
 	}
 });
 
