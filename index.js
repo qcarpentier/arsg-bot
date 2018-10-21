@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
-const bot = new Discord.Client();
-// Using colors in Console.Log > For tests only
 const colors = require('colors');
+
+const bot = new Discord.Client();
 
 // Bot Settings
 const prefix = '!';
@@ -23,7 +23,7 @@ bot.on('guildMemberAdd', member => {
 });
 
 bot.on('messageReactionAdd', (reaction, user) => {
-	console.log(`${user.username} reacted with ${reaction.emoji.name}`.yellow);
+	// console.log(`${user.username} reacted with ${reaction.emoji.name}`.yellow);
 
 	// Variables
 	const message = reaction.message;
@@ -69,12 +69,15 @@ bot.on('message', msg => {
 	const channel = msg.channel;
 	const author = msg.author;
 
+	// Exit and stop if the prefix is not there
+	if (!message.startsWith(prefix)) return;
+
 	// Ping-Pong
 	if (message.startsWith(prefix + 'ping')) {
 		channel.send('pong!');
 	}
 	// Invite link
-	if (message.startsWith(prefix + 'invitelink')) {
+	else if (message.startsWith(prefix + 'invitelink')) {
 		channel.send('Lien d\'invitation: https://discord.gg/y4vTKAR');
 	}
 	// Google Image
@@ -166,13 +169,14 @@ bot.on('message', msg => {
 			.addField('__souligné__', '`__souligné__`')
 			.addField('~~barré~~', '`~~barré~~`')
 			.addField('`code`', '`` `code` ``')
-			.addField('```bloc \nde code \nde plusieurs lignes```', '` ```bloc \nde code \nde plusieurs lignes``` `')
+			.addField('```bloc \nde code \nde plusieurs lignes```', '` ```bloc \nde code \nde plusieurs lignes``` `');
 
 		// Send the Rich Embed as a private message to the user
 		author.send(markdownEmbed);
 		// Delete the command message
 		msg.delete();
 	}
+	// Help
 	else if (message.startsWith(prefix + 'help')) {
 		// Build the Help Rich Embed
 		const helpEmbed = new Discord.RichEmbed()
@@ -183,8 +187,8 @@ bot.on('message', msg => {
 			.addField('`!rules`', 'Affiche les **règles générales** du serveur.')
 			.addField('`!markdown`', 'Affiche une liste détaillée sur le **Markdown**. (PS: va voir, c\'est stylé)')
 			.addField('`!google <recherche>`', 'Besoin de **rechercher** quelque chose? Ton meilleur pote Google est toujours là pour t\'épauler.')
-			.addField('`!googleimg <recherche>`', 'Besoin de **visualiser** quelque chose? Google Image sera toujours là pour toi.')
-		
+			.addField('`!googleimg <recherche>`', 'Besoin de **visualiser** quelque chose? Google Image sera toujours là pour toi.');
+
 		// Send the Rich Embed as a private message to the user
 		author.send(helpEmbed);
 		// Delete the command message
@@ -192,5 +196,5 @@ bot.on('message', msg => {
 	}
 });
 
-// Login  to the server
+// Login to the server
 bot.login(process.env.token);

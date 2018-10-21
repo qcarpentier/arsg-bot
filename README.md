@@ -56,7 +56,7 @@ You will use **NPM**. It's distributed with **Node** - which means that when you
 ### Submitting A Pull Request
 
 1. Prior to submitting your pull request, you should double check **if any commits have been made** to the `upstream master` branch:
-    ```
+    ```bash
     # Fetch upstream master and merge with your repo's master branch
     git fetch upstream
     git checkout master
@@ -68,7 +68,7 @@ You will use **NPM**. It's distributed with **Node** - which means that when you
     git rebase master
     ```
 3. It's desirable to **squash your commits** into a single cohesive commit. These commands will open up a text editor where you can specify which commits to squash:
-    ```
+    ```bash
     # Rebase all commits on your development branch
     git checkout 
     git rebase -i master
@@ -80,6 +80,7 @@ You will use **NPM**. It's distributed with **Node** - which means that when you
 ## Built With
 * [discord.js](https://github.com/discordjs/discord.js/) - A powerful JavaScript library for interacting with the Discord API.
 * [node.js](https://github.com/nodejs/node) - Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine.
+* [colors.js](https://github.com/marak/colors.js/) - Get colors in your node.js console.
 
 ## Author
 * **Quentin Carpentier** - *Initial work* - [qcarpentier](https://github.com/qcarpentier)
