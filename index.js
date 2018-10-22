@@ -9,7 +9,7 @@ const prefix = '!';
 // Runs whenever the bot is connected
 bot.on('ready', () => {
 	console.log('Bot started.'.cyan);
-	bot.user.setActivity('Fortnite 2', { type: 'PLAYING' });
+	bot.user.setActivity('Red Dead Redemption 2', { type: 'PLAYING' });
 
 	// Fetch 'read-me' channel to 'cache' all messages
 	// 'messageReactionAdd' and 'messageReactionRemove' events will be triggered only if all messages are 'cached'
@@ -196,26 +196,34 @@ bot.on('message', msg => {
 	}
 	// Set homework
 	else if (message.startsWith(prefix + 'sethomework')) {
+		// Exit if the command is not inside a #homework channel
+		// if (message.channel.name.startsWith('homework')) return;
+
 		// Check if the command contains argument(s) > '!sethomework args'
 		if (message.indexOf(' ') >= 0) {
 			// Split the command based on space
 			const args = message.split(' ');
-	
-			// Set constants by the command args
-			const type = args[1];
-			const date = args[2];
-			const subject = args[3];
-			const description = args.slice(4).join(' ');
-			
-			// Delete user message
-			msg.delete();
 
-			// Send homework message
-			channel.send('**' + type + '**' + ' en ' + '**' + subject + '**' + ' pour le ' + '**' + date + '**' + '\n' + description).pin();
+			// Args should be <type> <date> <subject> <description>
+			const type = args[1].charAt(0).toUpperCase() + args[0].slice(1);
+			const date = args[2];
+			const subject = args[3].charAt(0).toUpperCase() + args[3].slice(1);
+			const description = args.slice(4).join(' ');
+
+			// Build the Homework Rich Embed
+			const homeworkEmbed = new Discord.RichEmbed()
+				.setTitle(`${type} en ${subject} pour le ${date}`)
+				.setDescription(description)
+				.setColor('#F8F096');
+
+			// Send the Rich Embed to the channel
+			channel.send(homeworkEmbed).then(m => m.pin());
+			// Delete the command message
+			msg.delete();
 		}
 		else {
 			// Send command usage message
-			channel.send('Pour créer un **devoir**, il suffit d\'effectuer la commande ```!sethomework <type> <date> <sujet> <description>```. \n Le ```<type>``` peut être un *devoir*, une *interro*, une *prépa*, ... \n Le sujet doit être l\'intitulé du cours: *Math*, *Français*, *Informatique*, *Histoire*...');
+			channel.send('Pour créer un **devoir**, il suffit d\'effectuer la commande `!sethomework <type> <date> <sujet> <description>`.\nLe `<type>` peut être un *devoir*, une *interro*, une *prépa*, ...\nLe `<sujet>` doit être l\'intitulé du cours: *Math*, *Français*, *Informatique*, *Histoire*...');
 		}
 	}
 });
