@@ -82,11 +82,11 @@ bot.on('message', msg => {
 	}
 	// Google Image
 	else if (message.startsWith(prefix + 'googleimg')) {
-		// Check if the command contains argument(s) > '/google args'
+		// Check if the command contains argument(s) > '!googleimg args'
 		if (message.indexOf(' ') >= 0) {
 			// Split the command based on space
 			const args = message.split(' ');
-			// Remove '/google'
+			// Remove '!googleimg'
 			args.shift();
 			// Send the Google search with all the args joined with %20 (hexcode for space) and '&tbm=isch' for Images
 			channel.send('https://www.google.be/#q=' + args.join('%20') + '&tbm=isch');
@@ -97,11 +97,11 @@ bot.on('message', msg => {
 	}
 	// Google
 	else if (message.startsWith(prefix + 'google')) {
-		// Check if the command contains argument(s) > '/google args'
+		// Check if the command contains argument(s) > '!google args'
 		if (message.indexOf(' ') >= 0) {
 			// Split the command based on space
 			const args = message.split(' ');
-			// Remove '/google'
+			// Remove '!google'
 			args.shift();
 			// Send the Google search with all the args joined with %20 (hexcode for space)
 			channel.send('https://www.google.be/#q=' + args.join('%20'));
@@ -205,16 +205,26 @@ bot.on('message', msg => {
 			const args = message.split(' ');
 
 			// Args should be <type> <date> <subject> <description>
-			const type = args[1].charAt(0).toUpperCase() + args[0].slice(1);
+			const type = args[1].charAt(0).toUpperCase() + args[1].slice(1);
 			const date = args[2];
 			const subject = args[3].charAt(0).toUpperCase() + args[3].slice(1);
 			const description = args.slice(4).join(' ');
+
+			// Date
+			let currentDate = new Date();
+			let day = currentDate.getDate();
+			let month = currentDate.getMonth() + 1;
+			const year = currentDate.getFullYear();
+			if(day < 10) day = '0' + day;
+			if(month < 10) month = '0' + month;
+			currentDate = day + '/' + month + '/' + year;
 
 			// Build the Homework Rich Embed
 			const homeworkEmbed = new Discord.RichEmbed()
 				.setTitle(`${type} en ${subject} pour le ${date}`)
 				.setDescription(description)
-				.setColor('#F8F096');
+				.setColor('#F8F096')
+				.setFooter(`Créé par ${msg.member.displayName} le ${currentDate}`);
 
 			// Send the Rich Embed to the channel
 			channel.send(homeworkEmbed).then(m => m.pin());
