@@ -208,7 +208,10 @@ bot.on('message', msg => {
 			const type = args[1].charAt(0).toUpperCase() + args[1].slice(1);
 			const date = args[2];
 			const subject = args[3].charAt(0).toUpperCase() + args[3].slice(1);
-			const description = args.slice(4).join(' ');
+			let description = args.slice(4).join(' ');
+
+			// Change first char of the description to uppercase
+			description = description.charAt(0).toUpperCase() + description.slice(1);
 
 			// Date
 			let currentDate = new Date();
@@ -219,24 +222,112 @@ bot.on('message', msg => {
 			if(month < 10) month = '0' + month;
 			currentDate = day + '/' + month + '/' + year;
 
+			// Homework date format
+			let dateSplitted = date.split('/');
+			let targetDay = parseInt(dateSplitted[0]);
+			let targetMonth = parseInt(dateSplitted[1]);
+			let targetYear = year;
+
+			// Return if the date isn't a number
+			if (isNaN(targetDay) || isNaN(targetMonth)) {
+				return channel.send('Format du message incorrect. `!sethomework` pour plus d\'infos.');
+			}
+
+			// Return if the date isn't correct
+			if (targetDay > 31 || targetMonth > 12) {
+				return channel.send('Date erronée.');
+			}
+
+			// Transform month number to month name
+			switch (targetMonth) {
+				case 1:
+					targetMonth = 'Janvier';
+					break;
+				case 2:
+					targetMonth = 'Février';
+					break;
+				case 3:
+					targetMonth = 'Mars';
+					break;
+				case 4:
+					targetMonth = 'Avril';
+					break;
+				case 5:
+					targetMonth = 'Mai';
+					break;
+				case 6:
+					targetMonth = 'Juin';
+					break;
+				case 7:
+					targetMonth = 'Juillet';
+					break;
+				case 8:
+					targetMonth = 'Août';
+					break;
+				case 9:
+					targetMonth = 'Septembre';
+					break;
+				case 10:
+					targetMonth = 'Octobre';
+					break;
+				case 11:
+					targetMonth = 'Novembre';
+					break;
+				case 12:
+					targetMonth = 'Décembre';
+					break;
+			}
+
 			// Build the Homework Rich Embed
 			const homeworkEmbed = new Discord.RichEmbed()
-				.setTitle(`${type} en ${subject} pour le ${date}`)
+				.setTitle(`${type} en ${subject} pour le ${targetDay} ${targetMonth} ${targetYear}`)
 				.setDescription(description)
 				.setColor('#F8F096')
 				.setFooter(`Créé par ${msg.member.displayName} le ${currentDate}`);
 
 			// Send the Rich Embed to the channel
 			channel.send(homeworkEmbed).then(m => m.pin());
+
 			// Delete the command message
 			msg.delete();
 		}
 		else {
 			// Send command usage message
-			channel.send('Pour créer un **devoir**, il suffit d\'effectuer la commande `!sethomework <type> <date> <sujet> <description>`.\nLe `<type>` peut être un *devoir*, une *interro*, une *prépa*, ...\nLe `<sujet>` doit être l\'intitulé du cours: *Math*, *Français*, *Informatique*, *Histoire*...');
+			channel.send('Pour créer un **devoir**, il suffit d\'effectuer la commande `!sethomework <type> <date> <sujet> <description>`.\n• Le `<type>` peut être un *devoir*, une *interro*, une *prépa*, ...\n• La `<date>` doit **impérativement** être au format `jj/mm` (**jour**/**mois**).\n• Le `<sujet>` doit être l\'intitulé du cours: *Math*, *Français*, *Informatique*, *Histoire*...');
 		}
 	}
+	// Unpin all messages
+	else if (message.startsWith(prefix + 'unpin')) {
+
+		// Fetching all channel pinned messages
+		channel.fetchPinnedMessages()
+  		.then(messagesArray => {
+			
+			// Deleting pinned messages one by one
+			messagesArray.forEach(messages => {
+				messages.delete();
+			});
+
+		});
+
+	}
+	// Purge channel
+	else if (message.startsWith(prefix + 'purge')) {
+
+		// Fetching all channel messages
+		channel.fetchMessages()
+  		.then(messagesArray => {
+			
+			// Deleting messages one by one
+			messagesArray.forEach(messages => {
+				messages.delete();
+			});
+
+		});
+
+	}
+
 });
 
 // Login to the server
-bot.login(process.env.token);
+bot.login('NDk3Nzk1NTQ1OTg5OTA2NDQz.Dp_4Wg.tORnTFS3RhUq8i4-rudNfmJaPds');
