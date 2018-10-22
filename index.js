@@ -194,6 +194,30 @@ bot.on('message', msg => {
 		// Delete the command message
 		msg.delete();
 	}
+	// Set homework
+	else if (message.startsWith(prefix + 'sethomework')) {
+		// Check if the command contains argument(s) > '!sethomework args'
+		if (message.indexOf(' ') >= 0) {
+			// Split the command based on space
+			const args = message.split(' ');
+	
+			// Set constants by the command args
+			const type = args[1];
+			const date = args[2];
+			const subject = args[3];
+			const description = args.slice(4).join(' ');
+			
+			// Delete user message
+			msg.delete();
+
+			// Send homework message
+			channel.send('**' + type + '**' + ' en ' + '**' + subject + '**' + ' pour le ' + '**' + date + '**' + '\n' + description).pin();
+		}
+		else {
+			// Send command usage message
+			channel.send('Pour créer un **devoir**, il suffit d\'effectuer la commande ```!sethomework <type> <date> <sujet> <description>```. \n Le ```<type>``` peut être un *devoir*, une *interro*, une *prépa*, ... \n Le sujet doit être l\'intitulé du cours: *Math*, *Français*, *Informatique*, *Histoire*...');
+		}
+	}
 });
 
 // Login to the server
