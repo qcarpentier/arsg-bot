@@ -208,7 +208,7 @@ bot.on('message', msg => {
 			const description = args.slice(4).join(' ');
 			
 			// Delete user message
-			message.delete();
+			msg.delete();
 
 			// Send homework message
 			channel.send('**' + type + '**' + ' en ' + '**' + subject + '**' + ' pour le ' + '**' + date + '**' + '\n' + description).pin();
