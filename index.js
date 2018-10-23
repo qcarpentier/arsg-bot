@@ -200,13 +200,10 @@ bot.on('message', msg => {
 		// Exit if the command is not inside a #homework channel
 		// if (message.channel.name.startsWith('homework')) return;
 
-=======
->>>>>>> 840745db875f8ac3f9344b95adef894e586e0dca
 		// Check if the command contains argument(s) > '!sethomework args'
 		if (message.indexOf(' ') >= 0) {
 			// Split the command based on space
 			const args = message.split(' ');
-<<<<<<< HEAD
 
 			// Args should be <type> <date> <subject> <description>
 			const type = args[1].charAt(0).toUpperCase() + args[1].slice(1);
