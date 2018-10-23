@@ -196,7 +196,7 @@ bot.on('message', msg => {
 	}
 	// Set homework
 	else if (message.startsWith(prefix + 'sethomework')) {
-<<<<<<< HEAD
+
 		// Exit if the command is not inside a #homework channel
 		// if (message.channel.name.startsWith('homework')) return;
 
@@ -297,34 +297,62 @@ bot.on('message', msg => {
 			channel.send('Pour créer un **devoir**, il suffit d\'effectuer la commande `!sethomework <type> <date> <sujet> <description>`.\n• Le `<type>` peut être un *devoir*, une *interro*, une *prépa*, ...\n• La `<date>` doit **impérativement** être au format `jj/mm` (**jour**/**mois**).\n• Le `<sujet>` doit être l\'intitulé du cours: *Math*, *Français*, *Informatique*, *Histoire*...');
 		}
 	}
-	// Unpin all messages
+	// Unpin all messages of the channel
 	else if (message.startsWith(prefix + 'unpin')) {
 
-		// Fetching all channel pinned messages
-		channel.fetchPinnedMessages()
-  		.then(messagesArray => {
-			
-			// Deleting pinned messages one by one
-			messagesArray.forEach(messages => {
-				messages.delete();
+		// Get contributore role
+		const contributorRole = msg.guild.roles.find(role => role.name === 'Contributor');
+
+		// Trick to swap User type into a GuildMember type (to be able to assign a role)
+		const member = msg.guild.members.get(author.id);
+
+		// Verify if sender has contributor role
+		if (msg.member.roles.has(contributorRole.id)){
+
+			// Fetching all channel pinned messages
+			channel.fetchPinnedMessages()
+			  .then(messagesArray => {
+				
+				// Deleting pinned messages one by one
+				messagesArray.forEach(messageList => {
+					messageList.delete();
+				});
+	
 			});
 
-		});
+			msg.delete();
+
+		} else {
+			channel.send('Vous n\'avez pas le droit d\'utiliser cette commande.');
+		}
 
 	}
-	// Purge channel
+	// Purge channel message
 	else if (message.startsWith(prefix + 'purge')) {
 
-		// Fetching all channel messages
-		channel.fetchMessages()
-  		.then(messagesArray => {
-			
-			// Deleting messages one by one
-			messagesArray.forEach(messages => {
-				messages.delete();
-			});
+		// Get contributore role
+		const contributorRole = msg.guild.roles.find(role => role.name === 'Contributor');
 
-		});
+		// Trick to swap User type into a GuildMember type (to be able to assign a role)
+		const member = msg.guild.members.get(author.id);
+
+		// Verify if sender has contributor role
+		if (msg.member.roles.has(contributorRole.id)){
+
+			// Fetching all channel messages
+			channel.fetchMessages()
+  			.then(messagesArray => {
+			
+				// Deleting messages one by one
+				messagesArray.forEach(messageList => {
+					messageList.delete();
+				});
+
+			}); // TODO: Fix crashing when typing !purge two times 
+
+		} else {
+			channel.send('Vous n\'avez pas le droit d\'utiliser cette commande.');
+		}
 
 	}
 
