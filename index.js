@@ -30,7 +30,7 @@ bot.on('guildMemberAdd', member => {
 });
 
 bot.on('messageReactionAdd', (reaction, user) => {
-  // Variables
+  // Get message linked to the reaction
   const message = reaction.message;
   // Apply the reaction event only on the 'read-me' channel and only if the emoji is ✅
   if (message.channel.name !== 'read-me') return;
@@ -73,11 +73,10 @@ bot.on('message', msg => {
   const channel = msg.channel;
   const author = msg.author;
 
-  // Exit and stop if the prefix is not there
+  // Exit and stop if the prefix is not there, if the author is a Bot,
+  // or if the command is called in Direct Message
   if (!message.startsWith(prefix)) return;
-  // Exit and stop if the author is a Bot
   if (author.bot) return;
-  // Exit and stop if the command is called in Direct Message
   if (channel.type === 'dm') return;
 
   // Ping-Pong
@@ -206,97 +205,59 @@ bot.on('message', msg => {
   // Set homework
   else if (message.startsWith(prefix + 'sethomework')) {
     // Exit if the command is not inside a #homework channel
-    if (message.channel.name.startsWith('homework')) return;
-
+    if (!msg.channel.name.includes('homework')) return channel.send('La commande `!sethomework` est uniquement disponible dans le channel `#homework` de votre classe.');
     // Check if the command contains argument(s) > '!sethomework args'
     if (message.indexOf(' ') >= 0) {
       // Split the command based on space
       const args = message.split(' ');
+
+      // Check if the command is called correctly
+      if(args.length < 4) return channel.send('La commande `!sethomework` n\'a pas été effectuée correctement.');
 
       // Args should be <type> <date> <subject> <description>
       const type = args[1].charAt(0).toUpperCase() + args[1].slice(1);
       const date = args[2];
       const subject = args[3].charAt(0).toUpperCase() + args[3].slice(1);
       let description = args.slice(4).join(' ');
-
-      // Change first char of the description to uppercase
       description = description.charAt(0).toUpperCase() + description.slice(1);
 
-      // Date
-      let currentDate = new Date();
+      // Regex matching 'dd/mm' date format
+      const dateRegex = /^(0?[1-9]|[12][0-9]|3[01])\/(0?[1-9]|1[0-2])$/;
+      if(!dateRegex.test(date)) return channel.send('Date erronée: la date doit impérativement être sous la forme `dd/mm`.');
+
+      // Current date format (footer)
+      const currentDate = new Date();
       let day = currentDate.getDate();
       let month = currentDate.getMonth() + 1;
       const year = currentDate.getFullYear();
       if(day < 10) day = '0' + day;
       if(month < 10) month = '0' + month;
-      currentDate = day + '/' + month + '/' + year;
+      // 'dd/mm/yyyy' date format
+      const currentDateFormat = day + '/' + month + '/' + year;
 
-      // Homework date format
-      const dateSplitted = date.split('/');
-      const targetDay = parseInt(dateSplitted[0]);
-      let targetMonth = parseInt(dateSplitted[1]);
-      const targetYear = year;
-
-      // Return if the date isn't a number
-      if (isNaN(targetDay) || isNaN(targetMonth)) {
-        return channel.send('Format du message incorrect. `!sethomework` pour plus d\'infos.');
-      }
-
-      // Return if the date isn't correct
-      if (targetDay > 31 || targetMonth > 12) {
-        return channel.send('Date erronée.');
-      }
-
-      // Transform month number to month name
-      switch (targetMonth) {
-        case 1:
-          targetMonth = 'Janvier';
-          break;
-        case 2:
-          targetMonth = 'Février';
-          break;
-        case 3:
-          targetMonth = 'Mars';
-          break;
-        case 4:
-          targetMonth = 'Avril';
-          break;
-        case 5:
-          targetMonth = 'Mai';
-          break;
-        case 6:
-          targetMonth = 'Juin';
-          break;
-        case 7:
-          targetMonth = 'Juillet';
-          break;
-        case 8:
-          targetMonth = 'Août';
-          break;
-        case 9:
-          targetMonth = 'Septembre';
-          break;
-        case 10:
-          targetMonth = 'Octobre';
-          break;
-        case 11:
-          targetMonth = 'Novembre';
-          break;
-        case 12:
-          targetMonth = 'Décembre';
-          break;
+      // Homework date format (header)
+      const monthNames = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+      const homeworkDate = date.split('/');
+      const homeworkDay = homeworkDate[0];
+      // Get the month name 
+      const homeworkMonth = monthNames[homeworkDate[1] - 1];
+      // Get the current year
+      let homeworkYear = year;
+      // Check if the given homework month is before the current month 
+      // If it's the case, it means the year should be incremented by 1 (end of the year case)
+      if(homeworkDate[1] < currentDate.getMonth() + 1) {
+        homeworkYear = year + 1;
       }
 
       // Build the Homework Rich Embed
       const homeworkEmbed = new Discord.RichEmbed()
-        .setTitle(`${type} en ${subject} pour le ${targetDay} ${targetMonth} ${targetYear}`)
+        .setTitle(`${type} en ${subject} pour le ${homeworkDay} ${homeworkMonth} ${homeworkYear}`)
         .setDescription(description)
         .setColor('#F8F096')
-        .setFooter(`Créé par ${msg.member.displayName} le ${currentDate}`);
+        .setFooter(`Créé par ${msg.member.displayName} le ${currentDateFormat}`);
 
       // Send the Rich Embed to the channel
       channel.send(homeworkEmbed).then(m => m.pin());
-
       // Delete the command message
       msg.delete();
     }
