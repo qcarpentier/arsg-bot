@@ -11,9 +11,12 @@ const token = process.env.TOKEN;
 
 // Runs whenever the bot is connected
 bot.on('ready', () => {
-  console.log('Bot started.'.cyan);
-  console.log(`${Object.keys(bot.users).length} users are connected to the server.`);
   bot.user.setActivity('Red Dead Redemption 2', { type: 'PLAYING' });
+
+  // Get online users (except bot)
+  const onlineUsers = bot.users.filter(u => u.presence.status !== 'offline' && !u.bot).size;
+  console.log('Bot started.'.cyan);
+  console.log(`${onlineUsers} users are connected to the server.`.yellow);
 
   // Fetch 'read-me' channel to 'cache' all messages
   // 'messageReactionAdd' and 'messageReactionRemove' events will be triggered only if all messages are 'cached'
