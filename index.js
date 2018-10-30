@@ -296,15 +296,25 @@ bot.on('message', msg => {
   // Purge channel message
   else if (message.startsWith(prefix + 'purge')) {
     // Get contributore role
-    const contributorRole = msg.guild.roles.find(role => role.name === 'Contributor');
+    const administratorRole = msg.guild.roles.find(role => role.name === 'Administrator');
+    let purgeNumber = 50;
+
+    if (message.indexOf(' ') >= 0) {
+      purgeNumber = message.split(' ');
+      // Remove '!unpin'
+      purgeNumber.shift();
+
+      // Check if purgeNumber is actually a number
+      if (isNaN(purgeNumber)) return author.send('Le nombre de messages à purger n\'est pas correct.');
+    }
 
     // Verify if sender has contributor role
-    if (msg.member.roles.has(contributorRole.id)) {
+    if (msg.member.roles.has(administratorRole.id)) {
       // Delete the command message
       msg.delete();
 
       // Fetch all channel messages
-      channel.fetchMessages().then(messages => {
+      channel.fetchMessages({ limit: purgeNumber }).then(messages => {
         channel.bulkDelete(messages)
           .catch(error => channel.send(`Error: ${error}`));
       });
