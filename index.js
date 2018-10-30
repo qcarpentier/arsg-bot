@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 require('colors');
-// Used for provisioning the environment ()
+// Used for provisioning the environment
 require('dotenv').config();
 
 const bot = new Discord.Client();
@@ -73,6 +73,10 @@ bot.on('message', msg => {
   const channel = msg.channel;
   const author = msg.author;
 
+  // Delete automatic 'pinned to this channel' message
+  // console.log(`Type: ${msg.type} - Author is bot? ${author.bot}`.magenta);
+  if (msg.type === 'PINS_ADD' && author.bot) return msg.delete();
+
   // Exit and stop if the prefix is not there, if the author is a Bot,
   // or if the command is called in Direct Message
   if (!message.startsWith(prefix)) return;
@@ -119,7 +123,7 @@ bot.on('message', msg => {
   }
   // Rules
   // TODO: Rework > Add Rich Embed
-  if (message.startsWith(prefix + 'rule')) {
+  else if (message.startsWith(prefix + 'rule')) {
     // Remove prefix '!'
     const ruleCommand = message.substr(1);
     // Regex matching 4 words and one digit > 'rule1', 'rule2'...
@@ -162,6 +166,9 @@ bot.on('message', msg => {
   }
   // Markdown cheatlist
   else if (message.startsWith(prefix + 'markdown')) {
+    // Delete the command message
+    msg.delete();
+
     // Build the Markdown Rich Embed
     const markdownEmbed = new Discord.RichEmbed()
       .setTitle('Donnez un peu de vie à vos conversations quotidiennes!')
@@ -180,11 +187,12 @@ bot.on('message', msg => {
 
     // Send the Rich Embed as a private message to the user
     author.send(markdownEmbed);
-    // Delete the command message
-    msg.delete();
   }
   // Help
   else if (message.startsWith(prefix + 'help')) {
+    // Delete the command message
+    msg.delete();
+
     // Build the Help Rich Embed
     const helpEmbed = new Discord.RichEmbed()
       .setTitle('Besoin d\'aide? Vous pouvez toujours compter sur **l\'ARSG Bot!**')
@@ -199,8 +207,6 @@ bot.on('message', msg => {
 
     // Send the Rich Embed as a private message to the user
     author.send(helpEmbed);
-    // Delete the command message
-    msg.delete();
   }
   // Set homework
   else if (message.startsWith(prefix + 'sethomework')) {
@@ -208,6 +214,9 @@ bot.on('message', msg => {
     if (!msg.channel.name.includes('homework')) return channel.send('La commande `!sethomework` est uniquement disponible dans le channel `#homework` de votre classe.');
     // Check if the command contains argument(s) > '!sethomework args'
     if (message.indexOf(' ') >= 0) {
+      // Delete the command message
+      msg.delete();
+
       // Split the command based on space
       const args = message.split(' ');
 
@@ -239,11 +248,11 @@ bot.on('message', msg => {
       const monthNames = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
       const homeworkDate = date.split('/');
       const homeworkDay = homeworkDate[0];
-      // Get the month name 
+      // Get the month name
       const homeworkMonth = monthNames[homeworkDate[1] - 1];
       // Get the current year
       let homeworkYear = year;
-      // Check if the given homework month is before the current month 
+      // Check if the given homework month is before the current month
       // If it's the case, it means the year should be incremented by 1 (end of the year case)
       if(homeworkDate[1] < currentDate.getMonth() + 1) {
         homeworkYear = year + 1;
@@ -258,8 +267,6 @@ bot.on('message', msg => {
 
       // Send the Rich Embed to the channel
       channel.send(homeworkEmbed).then(m => m.pin());
-      // Delete the command message
-      msg.delete();
     }
     else {
       // Send command usage message
@@ -268,60 +275,44 @@ bot.on('message', msg => {
   }
   // Unpin all messages of the channel
   else if (message.startsWith(prefix + 'unpin')) {
-
     // Get contributore role
     const contributorRole = msg.guild.roles.find(role => role.name === 'Contributor');
 
-    // Trick to swap User type into a GuildMember type (to be able to assign a role)
-    const member = msg.guild.members.get(author.id);
-
     // Verify if sender has contributor role
     if (msg.member.roles.has(contributorRole.id)) {
-
-      // Fetching all channel pinned messages
-      channel.fetchPinnedMessages().then(messagesArray => {
-        // Deleting pinned messages one by one
-        messagesArray.forEach(messageList => {
-          messageList.delete();
-        });
-      });
-
+      // Delete the command message
       msg.delete();
 
+      // Fetch all channel pinned messages
+      channel.fetchPinnedMessages().then(pinnedMessages => {
+        channel.bulkDelete(pinnedMessages)
+          .catch(error => channel.send(`Error: ${error}`));
+      });
     }
     else {
       channel.send('Vous n\'avez pas le droit d\'utiliser cette commande.');
     }
-
   }
   // Purge channel message
   else if (message.startsWith(prefix + 'purge')) {
-
     // Get contributore role
     const contributorRole = msg.guild.roles.find(role => role.name === 'Contributor');
 
-    // Trick to swap User type into a GuildMember type (to be able to assign a role)
-    const member = msg.guild.members.get(author.id);
-
     // Verify if sender has contributor role
     if (msg.member.roles.has(contributorRole.id)) {
+      // Delete the command message
+      msg.delete();
 
-      // Fetching all channel messages
-      // TODO: Fix crashing when typing !purge two times
-      channel.fetchMessages().then(messagesArray => {
-        // Deleting messages one by one
-        messagesArray.forEach(messageList => {
-          messageList.delete();
-        });
+      // Fetch all channel messages
+      channel.fetchMessages().then(messages => {
+        channel.bulkDelete(messages)
+          .catch(error => channel.send(`Error: ${error}`));
       });
-
     }
     else {
       channel.send('Vous n\'avez pas le droit d\'utiliser cette commande.');
     }
-
   }
-
 });
 
 // Login to the server
