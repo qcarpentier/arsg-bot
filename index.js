@@ -92,8 +92,9 @@ bot.on('messageReactionRemove', (reaction, user) => {
 bot.on('message', message => {
   // Variables
   const messageContent = message.content.toLowerCase();
-  const args = messageContent.split(' ').shift();
+  const args = messageContent.split(' ');
   const commandName = args[0].slice(prefix.length);
+  args.shift();
 
   // Delete automatic 'pinned to this channel' message
   if (message.type === 'PINS_ADD' && message.author.bot) return message.delete();
@@ -104,6 +105,11 @@ bot.on('message', message => {
   if (message.author.bot) return;
   if (message.channel.type === 'dm') return;
 
+  // console.log(`message: ${message}`.magenta);
+  // console.log(`messageContent: ${messageContent}`.magenta);
+  // console.log(`args: ${args}`.magenta);
+  // console.log(`commandName: ${commandName}`.magenta);
+  
   // Get the command
   const command = bot.commands.get(commandName);
   if (!command) return message.channel.send('Malheureusement, je ne connais pas encore cette commande. Vous pouvez proposer votre idée dans le channel #suggestions!');
@@ -111,14 +117,6 @@ bot.on('message', message => {
   command.run(bot, message, args);
 
   /*
-  // Ping-Pong
-  if (message.startsWith(prefix + 'ping')) {
-    channel.send('pong!');
-  }
-  // Invite link
-  if (message.startsWith(prefix + 'invitelink')) {
-    channel.send('Lien d\'invitation: https://discord.gg/y4vTKAR');
-  }
   // Google Image
   else if (message.startsWith(prefix + 'googleimg')) {
     // Check if the command contains argument(s) > '!googleimg args'
