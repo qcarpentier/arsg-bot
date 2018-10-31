@@ -1,13 +1,35 @@
 const Discord = require('discord.js');
-require('colors');
+const fs = require('fs');
 // Used for provisioning the environment
 require('dotenv').config();
+require('colors');
 
 const bot = new Discord.Client();
+// Collection of all the commands
+bot.commands = new Discord.Collection();
 
 // Bot Settings
 const prefix = '!';
 const token = process.env.TOKEN;
+
+// Read the commands folder
+fs.readdir('./commands/', (error, files) => {
+  if (error) return console.log(`Error: ${error}`.red);
+
+  // Get all .js files
+  const jsFile = files.filter(file => file.split('.').pop() === 'js');
+  if (jsFile.length <= 0) return console.log('Couldn\'t find commands.');
+
+  // Loop through each file
+  jsFile.forEach(file => {
+    // Require all .js files
+    const commands = require(`./commands/${file}`);
+    console.log(`${file} loaded!`.green);
+
+    // Set the command name (through config module) and load the modules in the command file
+    bot.commands.set(commands.config.command, commands);
+  });
+});
 
 // Runs whenever the bot is connected
 bot.on('ready', () => {
@@ -67,28 +89,34 @@ bot.on('messageReactionRemove', (reaction, user) => {
 });
 
 // Runs whenever a message is received
-bot.on('message', msg => {
+bot.on('message', message => {
   // Variables
-  const message = msg.content.toLowerCase();
-  const channel = msg.channel;
-  const author = msg.author;
+  const messageContent = message.content.toLowerCase();
+  const args = messageContent.split(' ').shift();
+  const commandName = args[0].slice(prefix.length);
 
   // Delete automatic 'pinned to this channel' message
-  // console.log(`Type: ${msg.type} - Author is bot? ${author.bot}`.magenta);
-  if (msg.type === 'PINS_ADD' && author.bot) return msg.delete();
+  if (message.type === 'PINS_ADD' && message.author.bot) return message.delete();
 
   // Exit and stop if the prefix is not there, if the author is a Bot,
   // or if the command is called in Direct Message
-  if (!message.startsWith(prefix)) return;
-  if (author.bot) return;
-  if (channel.type === 'dm') return;
+  if (!messageContent.startsWith(prefix)) return;
+  if (message.author.bot) return;
+  if (message.channel.type === 'dm') return;
 
+  // Get the command
+  const command = bot.commands.get(commandName);
+  if (!command) return message.channel.send('Malheureusement, je ne connais pas encore cette commande. Vous pouvez proposer votre idée dans le channel #suggestions!');
+  // Run the command
+  command.run(bot, message, args);
+
+  /*
   // Ping-Pong
   if (message.startsWith(prefix + 'ping')) {
     channel.send('pong!');
   }
   // Invite link
-  else if (message.startsWith(prefix + 'invitelink')) {
+  if (message.startsWith(prefix + 'invitelink')) {
     channel.send('Lien d\'invitation: https://discord.gg/y4vTKAR');
   }
   // Google Image
@@ -270,8 +298,8 @@ bot.on('message', msg => {
     }
     else {
       // Send command usage message
-      channel.send('Pour créer un **devoir**, il suffit d\'effectuer la commande `!sethomework <type> <date> <sujet> <description>`.\n• Le `<type>` peut être un *devoir*, une *interro*, une *prépa*, ...\n• La `<date>` doit **impérativement** être au format `jj/mm` (**jour**/**mois**).\n• Le `<sujet>` doit être l\'intitulé du cours: *Math*, *Français*, *Informatique*, *Histoire*...');
-    }
+      channel.send('Pour créer un **devoir**, il suffit d\'effectuer la commande `!sethomework <type> <date> <sujet> <description>`.\n• Le `<type>` peut être un *devoir*, une *interro*, une *prépa*, ...\n• La `<date>` doit **impérativement** être au format `jj/mm` (**jour**\/**mois**).\n• Le `<sujet>` doit être l\'intitulé du cours: *Math*, *Français*, *Informatique*, *Histoire*...');
+}
   }
   // Unpin all messages of the channel
   else if (message.startsWith(prefix + 'unpin')) {
@@ -322,7 +350,7 @@ bot.on('message', msg => {
     else {
       channel.send('Vous n\'avez pas le droit d\'utiliser cette commande.');
     }
-  }
+  }*/
 });
 
 // Login to the server
