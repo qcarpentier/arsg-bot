@@ -24,7 +24,7 @@ fs.readdir('./commands/', (error, files) => {
   jsFile.forEach(file => {
     // Require all .js files
     const commands = require(`./commands/${file}`);
-    console.log(`${file} loaded!`.green);
+    // console.log(`${file} loaded!`.green);
 
     // Set the command name (through config module) and load the modules in the command file
     bot.commands.set(commands.config.command, commands);
@@ -109,7 +109,7 @@ bot.on('message', message => {
   // console.log(`messageContent: ${messageContent}`.magenta);
   // console.log(`args: ${args}`.magenta);
   // console.log(`commandName: ${commandName}`.magenta);
-  
+
   // Get the command
   const command = bot.commands.get(commandName);
   if (!command) return message.channel.send('Malheureusement, je ne connais pas encore cette commande. Vous pouvez proposer votre idée dans le channel #suggestions!');
@@ -117,79 +117,6 @@ bot.on('message', message => {
   command.run(bot, message, args);
 
   /*
-  // Google Image
-  else if (message.startsWith(prefix + 'googleimg')) {
-    // Check if the command contains argument(s) > '!googleimg args'
-    if (message.indexOf(' ') >= 0) {
-      // Split the command based on space
-      const args = message.split(' ');
-      // Remove '!googleimg'
-      args.shift();
-      // Send the Google search with all the args joined with %20 (hexcode for space) and '&tbm=isch' for Images
-      channel.send('https://www.google.be/#q=' + args.join('%20') + '&tbm=isch');
-    }
-    else {
-      channel.send('Pour faire une recherche **Google Image**, il suffit d\'écrire une recherche après la commande `/googleimg`.');
-    }
-  }
-  // Google
-  else if (message.startsWith(prefix + 'google')) {
-    // Check if the command contains argument(s) > '!google args'
-    if (message.indexOf(' ') >= 0) {
-      // Split the command based on space
-      const args = message.split(' ');
-      // Remove '!google'
-      args.shift();
-      // Send the Google search with all the args joined with %20 (hexcode for space)
-      channel.send('https://www.google.be/#q=' + args.join('%20'));
-    }
-    else {
-      channel.send('Pour faire une recherche **Google**, il suffit d\'écrire une recherche après la commande `/google`.');
-    }
-  }
-  // Rules
-  // TODO: Rework > Add Rich Embed
-  else if (message.startsWith(prefix + 'rule')) {
-    // Remove prefix '!'
-    const ruleCommand = message.substr(1);
-    // Regex matching 4 words and one digit > 'rule1', 'rule2'...
-    const simpleRuleRegex = /^\w{4}\d{1}$/;
-    // Regex matching 5 words for 'rules'
-    const multipleRulesRegex = /^\w{5}$/;
-    // Get the last character
-    const lastCharacter = ruleCommand.substr(ruleCommand.length - 1);
-
-    // Check which rule is called (1 > 5)
-    if (simpleRuleRegex.test(ruleCommand) && parseInt(lastCharacter, 10) <= 5) {
-      switch (lastCharacter) {
-        case '1':
-          channel.send('**[1]** Écrivez dans un français correct, sans spam et sans flood.');
-          break;
-        case '2':
-          channel.send('**[2]** Respectez les autres élèves et leurs opinions.');
-          break;
-        case '3':
-          channel.send('**[3]** N\'envoyez pas de photo d\'un élève **sans son accord**, qu\'elle soit drôle ou non.');
-          break;
-        case '4':
-          channel.send('**[4]** L\'envoi de tout matériel nuisible, tel que les virus, est formellement interdit.');
-          break;
-        case '5':
-          channel.send('**[5]** Respectez la loi et la sensibilité d\'autrui (pas de piratage, de pornographie, de gore, etc.).');
-          break;
-        default:
-          break;
-      }
-    }
-    // Check if 'rules' is called
-    else if (multipleRulesRegex.test(ruleCommand) && lastCharacter == 's') {
-      channel.send('**[1]** Écrivez dans un français correct, sans spam et sans flood,\n**[2]** Respectez les autres élèves et leurs opinions,\n**[3]** N\'envoyez pas de photo d\'un élève **sans son accord**, qu\'elle soit drôle ou non,\n**[4]** L\'envoi de tout matériel nuisible, tel que les virus, est formellement interdit,\n**[5]** Respectez la loi et la sensibilité d\'autrui (pas de piratage, de pornographie, de gore, etc.).');
-    }
-    // Default message
-    else{
-      channel.send('Je ne suis qu\'un **Bot**! Je n\'ai pas encore l\'intelligence de créer mes propres règles. :pensive:');
-    }
-  }
   // Markdown cheatlist
   else if (message.startsWith(prefix + 'markdown')) {
     // Delete the command message
