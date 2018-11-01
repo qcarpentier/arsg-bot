@@ -109,10 +109,10 @@ bot.on("message", message => {
   if (message.author.bot) return;
   if (message.channel.type === "dm") return;
 
-  console.log(`message: ${message}`.magenta);
-  console.log(`messageContent: ${messageContent}`.magenta);
-  console.log(`args: ${args}`.magenta);
-  console.log(`commandName: ${commandName}`.magenta);
+  // console.log(`message: ${message}`.magenta);
+  // console.log(`messageContent: ${messageContent}`.magenta);
+  // console.log(`args: ${args}`.magenta);
+  // console.log(`commandName: ${commandName}`.magenta);
 
   // Get the command
   const command = bot.commands.get(commandName);
