@@ -105,127 +105,18 @@ bot.on('message', message => {
   if (message.author.bot) return;
   if (message.channel.type === 'dm') return;
 
-  // console.log(`message: ${message}`.magenta);
-  // console.log(`messageContent: ${messageContent}`.magenta);
-  // console.log(`args: ${args}`.magenta);
-  // console.log(`commandName: ${commandName}`.magenta);
+  console.log(`message: ${message}`.magenta);
+  console.log(`messageContent: ${messageContent}`.magenta);
+  console.log(`args: ${args}`.magenta);
+  console.log(`commandName: ${commandName}`.magenta);
 
   // Get the command
   const command = bot.commands.get(commandName);
-  if (!command) return message.channel.send('Malheureusement, je ne connais pas encore cette commande. Vous pouvez proposer votre idée dans le channel #suggestions!');
+  if (!command) return message.channel.send('Malheureusement, je ne connais pas encore cette commande. Vous pouvez proposer votre idée dans le channel `#suggestions`!');
   // Run the command
   command.run(bot, message, args);
 
   /*
-  // Markdown cheatlist
-  else if (message.startsWith(prefix + 'markdown')) {
-    // Delete the command message
-    msg.delete();
-
-    // Build the Markdown Rich Embed
-    const markdownEmbed = new Discord.RichEmbed()
-      .setTitle('Donnez un peu de vie à vos conversations quotidiennes!')
-      .setDescription('Le **Markdown** est un système de formatage qui vous aidera à faire ressortir vos phrases. Ajoutez juste quelques caractères autour votre texte et le tour est joué!')
-      .setColor('#F8F096')
-      .addField('*italique*', '`*italique*` **ou** `_italique_`')
-      .addField('__*italique souligné*__', '`__*italique souligné*__`')
-      .addField('**gras**', '`**gras**`')
-      .addField('__**gras souligné**__', '`__**gras souligné**__`')
-      .addField('***gras italique***', '`***gras italique***`')
-      .addField('__***gras souligné italique***__', '`__***gras souligné italique***__`')
-      .addField('__souligné__', '`__souligné__`')
-      .addField('~~barré~~', '`~~barré~~`')
-      .addField('`code`', '`` `code` ``')
-      .addField('```bloc \nde code \nde plusieurs lignes```', '` ```bloc \nde code \nde plusieurs lignes``` `');
-
-    // Send the Rich Embed as a private message to the user
-    author.send(markdownEmbed);
-  }
-  // Help
-  else if (message.startsWith(prefix + 'help')) {
-    // Delete the command message
-    msg.delete();
-
-    // Build the Help Rich Embed
-    const helpEmbed = new Discord.RichEmbed()
-      .setTitle('Besoin d\'aide? Vous pouvez toujours compter sur **l\'ARSG Bot!**')
-      .setDescription('Pour effectuer une **commande** sur le serveur, il vous suffit simplement de faire `!` suivi du nom de la commande:')
-      .setColor('#F8F096')
-      .addField('`!help`', 'Affiche **l\'aide** du serveur.')
-      .addField('`!rules`', 'Affiche les **règles générales** du serveur.')
-      .addField('`!sethomework <type> <date> <cours> <description>`', 'Crée et épingle **un devoir, une interro, une prépa, un examen** ainsi que sa description. (uniquement dans le channel #homework)')
-      .addField('`!markdown`', 'Affiche une liste détaillée sur le **Markdown**. (PS: va voir, c\'est stylé)')
-      .addField('`!google <recherche>`', 'Besoin de **rechercher** quelque chose? Ton meilleur pote Google est toujours là pour t\'épauler.')
-      .addField('`!googleimg <recherche>`', 'Besoin de **visualiser** quelque chose? Google Image sera toujours là pour toi.');
-
-    // Send the Rich Embed as a private message to the user
-    author.send(helpEmbed);
-  }
-  // Set homework
-  else if (message.startsWith(prefix + 'sethomework')) {
-    // Exit if the command is not inside a #homework channel
-    if (!msg.channel.name.includes('homework')) return channel.send('La commande `!sethomework` est uniquement disponible dans le channel `#homework` de votre classe.');
-    // Check if the command contains argument(s) > '!sethomework args'
-    if (message.indexOf(' ') >= 0) {
-      // Delete the command message
-      msg.delete();
-
-      // Split the command based on space
-      const args = message.split(' ');
-
-      // Check if the command is called correctly
-      if(args.length < 4) return channel.send('La commande `!sethomework` n\'a pas été effectuée correctement.');
-
-      // Args should be <type> <date> <subject> <description>
-      const type = args[1].charAt(0).toUpperCase() + args[1].slice(1);
-      const date = args[2];
-      const subject = args[3].charAt(0).toUpperCase() + args[3].slice(1);
-      let description = args.slice(4).join(' ');
-      description = description.charAt(0).toUpperCase() + description.slice(1);
-
-      // Regex matching 'dd/mm' date format
-      const dateRegex = /^(0?[1-9]|[12][0-9]|3[01])\/(0?[1-9]|1[0-2])$/;
-      if(!dateRegex.test(date)) return channel.send('Date erronée: la date doit impérativement être sous la forme `dd/mm`.');
-
-      // Current date format (footer)
-      const currentDate = new Date();
-      let day = currentDate.getDate();
-      let month = currentDate.getMonth() + 1;
-      const year = currentDate.getFullYear();
-      if(day < 10) day = '0' + day;
-      if(month < 10) month = '0' + month;
-      // 'dd/mm/yyyy' date format
-      const currentDateFormat = day + '/' + month + '/' + year;
-
-      // Homework date format (header)
-      const monthNames = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
-      const homeworkDate = date.split('/');
-      const homeworkDay = homeworkDate[0];
-      // Get the month name
-      const homeworkMonth = monthNames[homeworkDate[1] - 1];
-      // Get the current year
-      let homeworkYear = year;
-      // Check if the given homework month is before the current month
-      // If it's the case, it means the year should be incremented by 1 (end of the year case)
-      if(homeworkDate[1] < currentDate.getMonth() + 1) {
-        homeworkYear = year + 1;
-      }
-
-      // Build the Homework Rich Embed
-      const homeworkEmbed = new Discord.RichEmbed()
-        .setTitle(`${type} en ${subject} pour le ${homeworkDay} ${homeworkMonth} ${homeworkYear}`)
-        .setDescription(description)
-        .setColor('#F8F096')
-        .setFooter(`Créé par ${msg.member.displayName} le ${currentDateFormat}`);
-
-      // Send the Rich Embed to the channel
-      channel.send(homeworkEmbed).then(m => m.pin());
-    }
-    else {
-      // Send command usage message
-      channel.send('Pour créer un **devoir**, il suffit d\'effectuer la commande `!sethomework <type> <date> <sujet> <description>`.\n• Le `<type>` peut être un *devoir*, une *interro*, une *prépa*, ...\n• La `<date>` doit **impérativement** être au format `jj/mm` (**jour**\/**mois**).\n• Le `<sujet>` doit être l\'intitulé du cours: *Math*, *Français*, *Informatique*, *Histoire*...');
-}
-  }
   // Unpin all messages of the channel
   else if (message.startsWith(prefix + 'unpin')) {
     // Get contributore role
