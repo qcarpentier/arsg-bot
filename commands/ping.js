@@ -9,7 +9,7 @@ module.exports.run = async (bot, message, args) => {
         .addField('Bot Ping : ', Math.floor(botping) + ' **ms**') // Calculate ping of bot call
         .addField('Message Ping : ', '~' + Math.round(msgping2) + ' **ms**') // Calculate ping of message
         .setTimestamp(new Date()) //Get date
-        .setFooter(`Demander par ${message.author.tag}`);
+        .setFooter(`Demandé par ${message.author.tag}`);
     return message.channel.send(pingembed);
 };
 
