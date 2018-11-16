@@ -1,28 +1,16 @@
-- [About ARSG Bot](#about-arsg-bot)
-- [Contributing](#contributing)
-- [Getting Started](#getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Installation](#installation)
-    - [Adding A Feature](#adding-a-feature)
-    - [Submitting A Pull Request](#submitting-a-pull-request)
-- [Built With](#built-with)
-- [Author](#author)
-- [License](#license)
-- [Acknowledgments](#acknowledgments)
-
-## About ARSG Bot
+## 🤖 ARSG Bot! 
 Have you ever dreamed of a Discord server for your group, your community or even your classroom? 
 **ARSG Bot is built for classrooms** and is used as an open source project by Highschool IT students. 
 
-## Contributing
+## 🎁 Contributing
 As I use this for my own classrooms and students, I know this might not be the perfect approach
 for all the projects out there. If you have any ideas, just
 [**open an issue**](https://github.com/qcarpentier/arsg-bot/issues/new) and tell me what you think.  
 If you'd like to contribute, please fork the repository and make changes as
-you'd like. **Pull requests are warmly welcome.** (see below how to do it)
+you'd like.  
+**Pull requests are warmly welcome.** (see below how to do it)
 
-## Getting Started
-
+## 🐣 Getting Started
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
 
 ### Prerequisites
@@ -77,17 +65,27 @@ You will use **NPM**. It's distributed with **Node** - which means that when you
 5. From your fork, **open a pull request in the correct branch**. Target the project's `develop` branch if there is one, else go for `master`! 
 6. Once the pull request is approved and merged, you can pull the changes from `upstream` to your local repo and delete your extra branch(es).
 
-## Built With
-* [discord.js](https://github.com/discordjs/discord.js/) - A powerful JavaScript library for interacting with the Discord API.
+## 📚 Built With
 * [node.js](https://github.com/nodejs/node) - Node.js is a JavaScript runtime built on Chrome's V8 JavaScript engine.
-* [colors.js](https://github.com/marak/colors.js/) - Get colors in your node.js console.
+* [discord.js](https://github.com/discordjs/discord.js/) - A powerful JavaScript library for interacting with the Discord API.
+* [dotenv](https://github.com/motdotla/dotenv) - Loads environment variables from `.env` for Node.js projects.
+* [colors.js](https://github.com/marak/colors.js/) - Get colors in your Node.js console.
 
-## Author
-* **Quentin Carpentier** - *Initial work* - [qcarpentier](https://github.com/qcarpentier)
+## ❤️ Credits
 
-## License
+> **Quentin Carpentier** &nbsp;&middot;&nbsp; 
+> Teacher &nbsp;&middot;&nbsp;
+> *Author and maintenance* &nbsp;&middot;&nbsp; 
+> [qcarpentier](https://github.com/qcarpentier)
+
+> **Salvatore Macaluso** &nbsp;&middot;&nbsp; 
+> IT Student &nbsp;&middot;&nbsp;
+> *Contributor* &nbsp;&middot;&nbsp; 
+> [Kaiiso](https://github.com/Kaiiso)
+
+## 🎓 License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
-## Acknowledgments
+## 📝 Acknowledgments
 * **The project isn't finished yet**. 
 For now, the Bot can only be used for specific commands. It should be available with some wonderful features targeting **Education**.
