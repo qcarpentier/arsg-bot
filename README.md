@@ -83,6 +83,11 @@ You will use **NPM**. It's distributed with **Node** - which means that when you
 > *Contributor* &nbsp;&middot;&nbsp; 
 > [Kaiiso](https://github.com/Kaiiso)
 
+> **David Joly** &nbsp;&middot;&nbsp; 
+> IT Student &nbsp;&middot;&nbsp;
+> *Contributor* &nbsp;&middot;&nbsp; 
+> [ASmallCookie](https://github.com/ASmallCookie)
+
 ## 🎓 License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
