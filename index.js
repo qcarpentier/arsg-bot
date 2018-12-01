@@ -60,15 +60,17 @@ bot.on("messageReactionAdd", (reaction, user) => {
   if (message.channel.name !== "read-me") return;
   if (reaction.emoji.name !== "✅") return;
 
-  // Fetch 'Member' and 'Guest' roles
+  // Fetch 'Member', 'Guest' and 'OnHold' roles
+  const onHoldRole = message.guild.roles.find(role => role.name === "OnHold");
   const memberRole = message.guild.roles.find(role => role.name === "Member");
   const guestRole = message.guild.roles.find(role => role.name === "Guest");
   // Trick to swap User type into a GuildMember type (to be able to assign a role)
   const member = message.guild.members.get(user.id);
 
   // Assign the 'Member' role and unassign the 'Guest' role
-  if (!member.roles.has(memberRole.id)) {
+  if (!member.roles.has(memberRole.id) && !member.roles.has(onHoldRole.id)) {
     member.addRole(memberRole.id);
+    member.addRole(onHoldRole.id);
     member.removeRole(guestRole.id);
   }
 });
@@ -80,12 +82,14 @@ bot.on("messageReactionRemove", (reaction, user) => {
   if (message.channel.name !== "read-me") return;
   if (reaction.emoji.name !== "✅") return;
 
+  const onHoldRole = message.guild.roles.find(role => role.name === "OnHold");
   const memberRole = message.guild.roles.find(role => role.name === "Member");
   const guestRole = message.guild.roles.find(role => role.name === "Guest");
   const member = message.guild.members.get(user.id);
 
-  if (member.roles.has(memberRole.id)) {
+  if (member.roles.has(memberRole.id) && member.roles.has(onHoldRole.id)) {
     member.removeRole(memberRole.id);
+    member.removeRole(onHoldRole.id);
     member.addRole(guestRole.id);
   }
 });

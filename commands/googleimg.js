@@ -1,6 +1,6 @@
 module.exports.run = async (bot, message, args) => {
   // Check if the command contains argument(s) > '!googleimg args'
-  if (message.indexOf(" ") >= 0) {
+  if (args.length > 0) {
     // Send the Google search with all the args joined with %20 (hexcode for space) and '&tbm=isch' for Images
     message.channel.send(
       "https://www.google.be/#q=" + args.join("%20") + "&tbm=isch"
