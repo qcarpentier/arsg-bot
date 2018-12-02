@@ -17,7 +17,7 @@ module.exports.run = async (bot, message, args) => {
       .setTitle("Erreur")
       .setDescription('Vous n\'avez pas la permission d\'effectuer cette commande.')
       .setTimestamp('*' + new Date() + '*')
-      return message.channel.send(errorEmbed);
+      return message.author.send(errorEmbed);
   }
 };
 
