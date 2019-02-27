@@ -124,5 +124,59 @@ bot.on("message", message => {
   command.run(bot, message, args);
 });
 
+// TODO: Rework file
+// XP Feature
+bot.on("message", message => {
+
+  const mysql = require('mysql');
+
+  const connection = mysql.createConnection({
+    host: process.env.HOST,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    database: process.env.DB
+  });
+
+  // Variables
+  const author = message.member;
+
+  if (message.author.bot) return;
+  if (message.channel.type === "dm") return;
+
+  // Connect to DB
+  connection.connect((err) => {
+    if(err) {
+      console.log('DB Error'.red);
+    }
+  });
+
+  // Increment message count when user send message
+  connection.query(`UPDATE users SET message=message+1 WHERE username='${author.toString()}'`, (err, result) => {
+
+    if (err) throw err;
+
+  });
+
+  // Calculate level with message count
+  connection.query(`SELECT message FROM users WHERE username = '${author.toString()}'`, (err, rows, fields) => {
+
+    if (err) throw err;
+
+    if(rows[0]) {
+
+      level = ((rows[0].message - (rows[0].message % 10)) / 10) + 1;
+
+      connection.query(`UPDATE users SET level=${level} WHERE username='${author.toString()}'`, (err, result) => {
+
+        if (err) throw err;
+
+      });
+
+    }
+
+  });
+
+});
+
 // Login to the server
 bot.login(token);
