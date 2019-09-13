@@ -1,8 +1,8 @@
 const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
-  const startTime = new Date();
   const member = message.member.displayName;
+  const startTime = new Date();
 
   message.channel.send("pong!").then(message => {
     const endTime = new Date();

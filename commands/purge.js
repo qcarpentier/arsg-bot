@@ -1,5 +1,5 @@
 module.exports.run = async (bot, message, args) => {
-  // Get contributore role
+  // Get Administrator role
   const administratorRole = message.guild.roles.find(
     role => role.name === "Administrator"
   );
@@ -19,18 +19,19 @@ module.exports.run = async (bot, message, args) => {
     }
   }
 
-  console.log(`purgeNumber: ${purgeNumber}`.magenta);
-
-  // Verify if sender has contributor role
+  // Verify if sender has administrator role
   if (message.member.roles.has(administratorRole.id)) {
     // Delete the command message
     message.delete();
 
     // Fetch all channel messages
     channel.fetchMessages({ limit: purgeNumber }).then(messages => {
-      channel
-        .bulkDelete(messages)
-        .catch(error => channel.send(`Error: ${error}`));
+      messages.forEach(message => message.delete());
+      // DiscordAPIError: You can only bulk delete messages that are under 14 days old.
+      // channel
+      //   .bulkDelete(messages, true)
+      //   .then(msg => console.log(`Bulk deleted ${msg.size} messages`))
+      //   .catch(error => channel.send(`Error: ${error}`));
     });
   } else {
     channel.send("Vous n'avez pas le droit d'utiliser cette commande.");

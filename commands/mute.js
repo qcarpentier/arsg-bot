@@ -10,16 +10,18 @@ module.exports.run = async (bot, message, args) => {
   const moderatorRole = message.guild.roles.find(
     role => role.name === "Moderator"
   );
+
   // Set an Error RichEmbed
   const setError = message => {
     const memberName = member.displayName;
-    let errorEmbed = new Discord.RichEmbed()
+    const errorEmbed = new Discord.RichEmbed()
       .setColor("e74c3c")
       .setTitle(`Erreur: ${message}`)
       .setTimestamp(new Date()) // Get date
       .setFooter(`Exception enregistrée par ${memberName}`);
     return errorEmbed;
   };
+  
   const member = message.member;
   const author = message.author;
   const hourRegex = /^\d+(\.\d+)?$/;
