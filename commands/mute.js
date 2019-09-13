@@ -17,11 +17,12 @@ module.exports.run = async (bot, message, args) => {
     const errorEmbed = new Discord.RichEmbed()
       .setColor("e74c3c")
       .setTitle(`Erreur: ${message}`)
-      .setTimestamp(new Date()) // Get date
+      // Get date
+      .setTimestamp(new Date()) 
       .setFooter(`Exception enregistrée par ${memberName}`);
     return errorEmbed;
   };
-  
+
   const member = message.member;
   const author = message.author;
   const hourRegex = /^\d+(\.\d+)?$/;

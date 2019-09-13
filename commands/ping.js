@@ -4,17 +4,20 @@ module.exports.run = async (bot, message, args) => {
   const member = message.member.displayName;
   const startTime = new Date();
 
-  message.channel.send("pong!").then(message => {
+  message.channel.send("pong!").then(msg => {
     const endTime = new Date();
     const apiPing = Math.round(endTime - startTime);
 
-    let pingEmbed = new Discord.RichEmbed()
-      .setColor("RANDOM") // Generate random color 
-      .addField('API Ping : ', apiPing + ' ms') // Calculate ms ping of API call
-      .addField('Bot Ping : ', bot.ping + ' ms') // Call the actual bot ping
+    const pingEmbed = new Discord.RichEmbed()
+      // Generate random color
+      .setColor("RANDOM")
+      // Calculate ms ping of API call
+      .addField("API Ping : ", apiPing + " ms")
+      // Call the actual bot ping
+      .addField("Bot Ping : ", bot.ping + " ms")
       .setFooter(`Demandé par ${member}`);
-    return message.channel.send(pingEmbed);
-  })
+    return msg.channel.send(pingEmbed);
+  });
 };
 
 module.exports.config = {
