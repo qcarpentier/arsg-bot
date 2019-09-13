@@ -71,12 +71,12 @@ module.exports.run = async (bot, message, args) => {
           "\n• PLAYING\n• STREAMING\n• LISTENING\n• WATCHING" +
           "\n\nExemple: `!setactivity watching YouTube`"
       );
-      
+
       return message.author.send(errorEmbed);
     } else {
       const activityEmbed = setEmbed(
         "Changement de l'activité du bot",
-        `Type: **${activityType}**, activité: **${activity}** `
+        `Type: **${activityType}** - Activité: **${activity}** `
       );
 
       bot.user.setActivity(activity, { type: activityType });
