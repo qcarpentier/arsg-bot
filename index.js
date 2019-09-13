@@ -32,7 +32,7 @@ fs.readdir("./commands/", (error, files) => {
 
 // Runs whenever the bot is connected
 bot.on("ready", () => {
-  bot.user.setActivity("Minecraft", { type: "PLAYING" });
+  bot.user.setActivity("Minecraft Education", { type: "PLAYING" });
 
   // Get online users (except bot)
   const onlineUsers = bot.users.filter(

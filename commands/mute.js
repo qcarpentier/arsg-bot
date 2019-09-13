@@ -12,13 +12,12 @@ module.exports.run = async (bot, message, args) => {
   );
 
   // Set an Error RichEmbed
-  const setError = message => {
+  const setError = msg => {
     const memberName = member.displayName;
     const errorEmbed = new Discord.RichEmbed()
       .setColor("e74c3c")
-      .setTitle(`Erreur: ${message}`)
-      // Get date
-      .setTimestamp(new Date()) 
+      .setTitle(`Erreur: ${msg}`)
+      .setTimestamp(new Date())
       .setFooter(`Exception enregistrée par ${memberName}`);
     return errorEmbed;
   };
@@ -66,8 +65,9 @@ module.exports.run = async (bot, message, args) => {
     }
 
     setTimeout(() => {
-      if (memberToBeMuted.roles.has(mutedRole.id))
+      if (memberToBeMuted.roles.has(mutedRole.id)) {
         memberToBeMuted.removeRole(mutedRole.id);
+      }
     }, args[1] * 60 * 60 * 1000);
   }
 };
