@@ -16,7 +16,7 @@ const token = process.env.TOKEN;
 fs.readdir("./commands/", (error, files) => {
   if (error) return console.log(`Error: ${error}`.red);
 
-  // Get all .js files
+  // Get all .js command files
   const jsFile = files.filter(file => file.split(".").pop() === "js");
   if (jsFile.length <= 0) return console.log("Couldn't find commands.");
 
@@ -24,7 +24,6 @@ fs.readdir("./commands/", (error, files) => {
   jsFile.forEach(file => {
     // Require all .js files
     const commands = require(`./commands/${file}`);
-    // console.log(`${file} loaded!`.green);
 
     // Set the command name (through config module) and load the modules in the command file
     bot.commands.set(commands.config.command, commands);
@@ -33,7 +32,7 @@ fs.readdir("./commands/", (error, files) => {
 
 // Runs whenever the bot is connected
 bot.on("ready", () => {
-  bot.user.setActivity("Red Dead Redemption 2", { type: "PLAYING" });
+  bot.user.setActivity("Minecraft", { type: "PLAYING" });
 
   // Get online users (except bot)
   const onlineUsers = bot.users.filter(
@@ -53,12 +52,12 @@ bot.on("guildMemberAdd", member => {
   member.addRole(member.guild.roles.find(role => role.name === "Guest"));
 });
 
+// Runs whenever a reaction is added
 bot.on("messageReactionAdd", (reaction, user) => {
   // Get message linked to the reaction
   const message = reaction.message;
   // Apply the reaction event only on the 'read-me' channel and only if the emoji is ✅
-  if (message.channel.name !== "read-me") return;
-  if (reaction.emoji.name !== "✅") return;
+  if (message.channel.name !== "read-me" || reaction.emoji.name !== "✅") return;
 
   // Fetch 'Member', 'Guest' and 'OnHold' roles
   const onHoldRole = message.guild.roles.find(role => role.name === "OnHold");
@@ -67,7 +66,7 @@ bot.on("messageReactionAdd", (reaction, user) => {
   // Trick to swap User type into a GuildMember type (to be able to assign a role)
   const member = message.guild.members.get(user.id);
 
-  // Assign the 'Member' role and unassign the 'Guest' role
+  // Assign the 'Member' & 'OnHold' roles and unassign the 'Guest' role
   if (!member.roles.has(memberRole.id) && !member.roles.has(onHoldRole.id)) {
     member.addRole(memberRole.id);
     member.addRole(onHoldRole.id);
@@ -76,11 +75,11 @@ bot.on("messageReactionAdd", (reaction, user) => {
 });
 
 // Basically the same as 'messageReactionAdd'
-// TODO: rework
+// Runs whenever a reaction is removed
 bot.on("messageReactionRemove", (reaction, user) => {
   const message = reaction.message;
-  if (message.channel.name !== "read-me") return;
-  if (reaction.emoji.name !== "✅") return;
+  if (message.channel.name !== "read-me" || reaction.emoji.name !== "✅") return;
+
 
   const onHoldRole = message.guild.roles.find(role => role.name === "OnHold");
   const memberRole = message.guild.roles.find(role => role.name === "Member");
@@ -126,57 +125,57 @@ bot.on("message", message => {
 
 // TODO: Rework file
 // XP Feature
-bot.on("message", message => {
+// bot.on("message", message => {
 
-  const mysql = require('mysql');
+//   const mysql = require('mysql');
 
-  const connection = mysql.createConnection({
-    host: process.env.HOST,
-    user: process.env.USER,
-    password: process.env.PASSWORD,
-    database: process.env.DB
-  });
+//   const connection = mysql.createConnection({
+//     host: process.env.HOST,
+//     user: process.env.USER,
+//     password: process.env.PASSWORD,
+//     database: process.env.DB
+//   });
 
-  // Variables
-  const author = message.member;
+//   // Variables
+//   const author = message.member;
 
-  if (message.author.bot) return;
-  if (message.channel.type === "dm") return;
+//   if (message.author.bot) return;
+//   if (message.channel.type === "dm") return;
 
-  // Connect to DB
-  connection.connect((err) => {
-    if(err) {
-      console.log('DB Error'.red);
-    }
-  });
+//   // Connect to DB
+//   connection.connect((err) => {
+//     if(err) {
+//       console.log('DB Error'.red);
+//     }
+//   });
 
-  // Increment message count when user send message
-  connection.query(`UPDATE users SET message=message+1 WHERE username='${author.toString()}'`, (err, result) => {
+//   // Increment message count when user send message
+//   connection.query(`UPDATE users SET message=message+1 WHERE username='${author.toString()}'`, (err, result) => {
 
-    if (err) throw err;
+//     if (err) throw err;
 
-  });
+//   });
 
-  // Calculate level with message count
-  connection.query(`SELECT message FROM users WHERE username = '${author.toString()}'`, (err, rows, fields) => {
+//   // Calculate level with message count
+//   connection.query(`SELECT message FROM users WHERE username = '${author.toString()}'`, (err, rows, fields) => {
 
-    if (err) throw err;
+//     if (err) throw err;
 
-    if(rows[0]) {
+//     if(rows[0]) {
 
-      level = ((rows[0].message - (rows[0].message % 10)) / 10) + 1;
+//       level = ((rows[0].message - (rows[0].message % 10)) / 10) + 1;
 
-      connection.query(`UPDATE users SET level=${level} WHERE username='${author.toString()}'`, (err, result) => {
+//       connection.query(`UPDATE users SET level=${level} WHERE username='${author.toString()}'`, (err, result) => {
 
-        if (err) throw err;
+//         if (err) throw err;
 
-      });
+//       });
 
-    }
+//     }
 
-  });
+//   });
 
-});
+// });
 
 // Login to the server
 bot.login(token);
