@@ -22,10 +22,10 @@ module.exports.run = async (bot, message, args) => {
     )
     .addField("__souligné__", "`__souligné__`")
     .addField("~~barré~~", "`~~barré~~`")
-    .addField("`code`", "`` `code` ``")
+    .addField("`code`", "` ``code`` `")
     .addField(
       "```bloc \nde code \nde plusieurs lignes```",
-      "` ```bloc \nde code \nde plusieurs lignes``` `"
+      "` ````bloc \nde code \nde plusieurs lignes```` `"
     );
 
   // Send the Rich Embed as a private message to the user
