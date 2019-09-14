@@ -17,28 +17,25 @@ module.exports.run = async (bot, message, args) => {
   // Get level ordered by highest > lowest
   User.find()
     .then(users => {
-      // users..reverse().slice(0, 3);
-      users
-        .sort((a, b) => {
-          return b.messages > a.messages;
-        })
-        .slice(0, 3);
+      console.log(`${users}`.blue);
+      
+      const sortedUsers = users.sort((a, b) => (a.messages < b.messages) ? 1 : -1).slice(0, 3);
 
-      const firstUserName = users[0]
-        ? users[0].username
+      const firstUserName = sortedUsers[0]
+        ? sortedUsers[0].username
         : "Utilisateur non existant";
-      const firstUserLevel = users[0] ? users[0].level : 0;
-      const firstUserMessages = users[0] ? users[0].messages : 0;
-      const secondUserName = users[1]
-        ? users[1].username
+      const firstUserLevel = sortedUsers[0] ? sortedUsers[0].level : 0;
+      const firstUserMessages = sortedUsers[0] ? sortedUsers[0].messages : 0;
+      const secondUserName = sortedUsers[1]
+        ? sortedUsers[1].username
         : "Utilisateur non existant";
-      const secondUserLevel = users[1] ? users[1].level : 0;
-      const secondUserMessages = users[1] ? users[1].messages : 0;
-      const thirdUserName = users[2]
-        ? users[2].username
+      const secondUserLevel = sortedUsers[1] ? sortedUsers[1].level : 0;
+      const secondUserMessages = sortedUsers[1] ? sortedUsers[1].messages : 0;
+      const thirdUserName = sortedUsers[2]
+        ? sortedUsers[2].username
         : "Utilisateur non existant";
-      const thirdUserLevel = users[2] ? users[2].level : 0;
-      const thirdUserMessages = users[2] ? users[2].messages : 0;
+      const thirdUserLevel = sortedUsers[2] ? sortedUsers[2].level : 0;
+      const thirdUserMessages = sortedUsers[2] ? sortedUsers[2].messages : 0;
 
       const classementEmbed = new Discord.RichEmbed()
         .setTitle(`Classement du ${currentDateFormat}`)
