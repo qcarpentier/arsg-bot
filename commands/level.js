@@ -29,13 +29,13 @@ module.exports.run = async (bot, message, args) => {
         }
       });
 
-      const classementEmbed = new Discord.RichEmbed()
+      const levelEmbed = new Discord.RichEmbed()
         .setTitle(`${member} est level ${user.level} !`)
         .setColor("RANDOM")
         .setDescription(`Plus que ${levelUpXp}XP pour level up!`)
         .setFooter(`Demandé par ${message.member.displayName}`);
 
-      channel.send(classementEmbed);
+      channel.send(levelEmbed);
     }
   });
 };
