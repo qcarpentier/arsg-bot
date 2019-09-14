@@ -2,33 +2,33 @@ const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
   // Exit if the command is not inside a #event channel
-  if (!message.channel.name.includes("events"))
+  if (!message.channel.name.includes("events")) {
     return message.channel.send(
       "La commande `!event` est uniquement disponible dans le channel `#events`"
     );
+  }
   // Exit if the command doesn't contain argument(s) > '!event args'
-  if (args.length === 0)
+  if (args.length === 0) {
     return message.channel.send(
       "Pour créer un **event**, il suffit d'effectuer la commande `!event <date> <sujet> <description>`.\n• La `<date>` doit **impérativement** être au format `jj/mm` (**jour**/**mois**).\n• Le `<sujet>` peut être le nom de l'evenement. ex: *Cinéma*, *Voyage*, *Souper*, *Congé* ... Celui-ci doit **impérativement** être en **un seul** mot."
     );
+  }
   // Check if the command is called correctly
-  if (args.length < 3)
+  if (args.length < 3) {
     return message.channel.send(
       "La commande `!event` n'a pas été effectuée correctement."
     );
+  }
 
-  // Args should be <type> <date> <subject> <description>
-  const date = args[0];
-  const sujet = args[1].charAt(0).toUpperCase() + args[1].slice(1);
+  // Args should be <subject> <date> <description>
+  const subject = args[0].charAt(0).toUpperCase() + args[0].slice(1);
+  const date = args[1];
   let description = args.slice(2).join(" ");
   description = description.charAt(0).toUpperCase() + description.slice(1);
 
   // Regex matching 'dd/mm' date format
   const dateRegex = /^(0?[1-9]|[12][0-9]|3[01])\/(0?[1-9]|1[0-2])$/;
-  if (!dateRegex.test(date))
-    return message.channel.send(
-      "Date erronée: la date doit impérativement être sous la forme `jj/mm`."
-    );
+  if(!dateRegex.test(date)) return message.channel.send("Date erronée: la date doit impérativement être sous la forme `jj/mm`.");
 
   // Current date format (footer)
   const currentDate = new Date();
@@ -69,7 +69,7 @@ module.exports.run = async (bot, message, args) => {
 
   // Build the event Rich Embed
   const eventEmbed = new Discord.RichEmbed()
-    .setTitle(`${sujet} le ${eventDay} ${eventMonth} ${eventYear}`)
+    .setTitle(`${subject} le ${eventDay} ${eventMonth} ${eventYear}`)
     .setDescription(description)
     .setColor("#F8F096")
     .setFooter(
