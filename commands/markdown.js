@@ -26,6 +26,12 @@ module.exports.run = async (bot, message, args) => {
     .addField(
       "```bloc \nde code \nde plusieurs lignes```",
       "` ````bloc \nde code \nde plusieurs lignes```` `"
+    )
+    .addField("||spoilers||", "`||spoilers||`")
+    .addField("> Une ligne de block quote", "`> Une ligne de block quote`")
+    .addField(
+      ">>> Plusieurs \nlignes \nde block quote",
+      "`>>> Plusieurs \nlignes \nde block quote`"
     );
 
   // Send the Rich Embed as a private message to the user
