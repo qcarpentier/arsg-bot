@@ -8,6 +8,9 @@ module.exports.run = async (bot, message, args) => {
       "Pour faire une recherche **Google**, il suffit d'écrire une recherche après la commande `/google`."
     );
   }
+
+  // Delete the command message
+  message.delete();
 };
 
 module.exports.config = {

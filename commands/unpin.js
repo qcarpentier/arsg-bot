@@ -23,6 +23,9 @@ module.exports.run = async (bot, message, args) => {
   } else {
     channel.send("Vous n'avez pas le droit d'utiliser cette commande.");
   }
+
+  // Delete the command message
+  message.delete();
 };
 
 module.exports.config = {

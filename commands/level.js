@@ -38,6 +38,9 @@ module.exports.run = async (bot, message, args) => {
       channel.send(levelEmbed);
     }
   });
+  
+  // Delete the command message
+  message.delete();
 };
 
 module.exports.config = {

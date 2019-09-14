@@ -18,9 +18,11 @@ module.exports.run = async (bot, message, args) => {
   User.find()
     .then(users => {
       // users..reverse().slice(0, 3);
-      users.sort((a, b) => {
-        return b.messages > a.messages;
-      }).slice(0, 3);
+      users
+        .sort((a, b) => {
+          return b.messages > a.messages;
+        })
+        .slice(0, 3);
 
       const firstUserName = users[0]
         ? users[0].username
@@ -51,6 +53,9 @@ module.exports.run = async (bot, message, args) => {
       channel.send(classementEmbed);
     })
     .catch(error => console.log(`Error: ${error}`));
+
+  // Delete the command message
+  message.delete();
 };
 
 module.exports.config = {

@@ -25,6 +25,9 @@ module.exports.run = async (bot, message, args) => {
       .setTimestamp("*" + new Date() + "*");
     return message.author.send(errorEmbed);
   }
+
+  // Delete the command message
+  message.delete();
 };
 
 module.exports.config = {
