@@ -14,14 +14,6 @@ module.exports.run = async (bot, message, args) => {
   // 'dd/mm/yyyy' date format
   const currentDateFormat = day + "/" + month + "/" + year;
 
-  // Current time format
-  let hour = currentDate.getHours();
-  let minute = currentDate.getMinutes();
-  if (hour < 10) hour = "0" + hour;
-  if (minute < 10) minute = "0" + minute;
-  // 'hh/mm' date format
-  const currentTimeFormat = hour + ":" + minute;
-
   // Get level ordered by highest > lowest
   User.find()
     .then(users => {
@@ -44,7 +36,7 @@ module.exports.run = async (bot, message, args) => {
       const thirdUserMessages = users[2] ? users[2].messages : 0;
 
       const classementEmbed = new Discord.RichEmbed()
-        .setTitle(`Classement du ${currentDateFormat} à ${currentTimeFormat}`)
+        .setTitle(`Classement du ${currentDateFormat}`)
         .setColor("RANDOM")
         .setDescription(
           `**[1]** ${firstUserName} - Level ${firstUserLevel} \n *${firstUserMessages} message(s)* \n
