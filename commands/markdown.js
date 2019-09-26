@@ -1,9 +1,6 @@
 const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
-  // Delete the command message
-  message.delete();
-
   // Build the Markdown Rich Embed
   const markdownEmbed = new Discord.RichEmbed()
     .setTitle("Donnez un peu de vie à vos conversations quotidiennes!")
@@ -36,6 +33,9 @@ module.exports.run = async (bot, message, args) => {
 
   // Send the Rich Embed as a private message to the user
   message.author.send(markdownEmbed);
+
+  // Delete the command message
+  message.delete();
 };
 
 module.exports.config = {

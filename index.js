@@ -117,6 +117,8 @@ bot.on("messageReactionRemove", (reaction, user) => {
 
 // Runs whenever a message is received
 bot.on("message", message => {
+  if (!message.member) return;
+  
   const member = message.member.displayName;
 
   // Remove the prefix to get the command name
