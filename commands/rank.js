@@ -17,6 +17,7 @@ module.exports.run = async (bot, message, args) => {
   // Get level ordered by highest > lowest
   User.find()
     .then(users => {
+      // Sort users by messages and take the first three
       const sortedUsers = users.sort((a, b) => (a.messages < b.messages) ? 1 : -1).slice(0, 3);
 
       const firstUserName = sortedUsers[0]

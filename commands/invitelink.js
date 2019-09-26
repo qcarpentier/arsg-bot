@@ -14,7 +14,7 @@ module.exports.run = async (bot, message, args) => {
     message.member.roles.has(administratorRole.id) ||
     message.member.roles.has(moderatorRole.id)
   ) {
-    message.channel.send("Lien d'invitation: https://discord.gg/y4vTKAR");
+    message.channel.send("Lien d'invitation: https://discord.gg/vZzDs6M");
   } else {
     const errorEmbed = new Discord.RichEmbed()
       .setColor("e74c3c")
