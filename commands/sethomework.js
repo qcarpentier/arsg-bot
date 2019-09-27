@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
   // Exit if the command is not inside a #homework channel
-  // if (!message.channel.name.includes("homework")) return message.channel.send("La commande `!sethomework` est uniquement disponible dans le channel `#homework` de votre classe.");
+  if (!message.channel.name.includes("homework")) return message.channel.send("La commande `!sethomework` est uniquement disponible dans le channel `#homework` de votre classe.");
   // Exit if the command doesn't contain argument(s) > '!sethomework args'
   if (args.length === 0) {
     return message.channel.send(
