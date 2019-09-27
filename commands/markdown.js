@@ -19,12 +19,12 @@ module.exports.run = async (bot, message, args) => {
     )
     .addField("__souligné__", "`__souligné__`")
     .addField("~~barré~~", "`~~barré~~`")
+    .addField("||spoilers||", "`||spoilers||`")
     .addField("`code`", "` ``code`` `")
     .addField(
       "```bloc \nde code \nde plusieurs lignes```",
       "` ````bloc \nde code \nde plusieurs lignes```` `"
     )
-    .addField("||spoilers||", "`||spoilers||`")
     .addField("> Une ligne de block quote", "`> Une ligne de block quote`")
     .addField(
       ">>> Plusieurs \nlignes \nde block quote",
