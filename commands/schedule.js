@@ -54,19 +54,23 @@ module.exports.run = async (bot, message, args) => {
         );
       }
 
-      return message.channel.send(
-        `>>> **${grade} - ${day}**\n` +
-          `1ère H - ${schedule.hour1 ? schedule.hour1 : "*"}\n` +
-          `2ème H - ${schedule.hour2 ? schedule.hour2 : "*"}\n` +
-          `3ème H - ${schedule.hour3 ? schedule.hour3 : "*"}\n` +
-          "Récréation\n" +
-          `4ème H - ${schedule.hour4 ? schedule.hour4 : "*"}\n` +
-          `5ème H - ${schedule.hour5 ? schedule.hour5 : "*"}\n` +
-          "Pause Midi\n" +
-          `6ème H - ${schedule.hour6 ? schedule.hour6 : "*"}\n` +
-          `7ème H - ${schedule.hour7 ? schedule.hour7 : "*"}\n` +
-          `8ème H - ${schedule.hour8 ? schedule.hour8 : "*"}`
-      );
+      const classementEmbed = new Discord.RichEmbed()
+        .setTitle(`Horaire des ${grade} - ${day}`)
+        .setColor("RANDOM")
+        .setDescription(
+          `_1ère H:_ **${schedule.hour1 ? schedule.hour1 : "*"}** \n
+          _2ème H:_ **${schedule.hour2 ? schedule.hour2 : "*"}** \n 
+          _3ème H:_ **${schedule.hour3 ? schedule.hour3 : "*"}** \n 
+          _\u2014 Récréation \u2014_\n 
+          _4ème H:_ **${schedule.hour4 ? schedule.hour4 : "*"}** \n 
+          _5ème H:_ **${schedule.hour5 ? schedule.hour5 : "*"}** \n 
+          _\u2014 Pause Midi \u2014_\n 
+          _6ème H:_ **${schedule.hour6 ? schedule.hour6 : "*"}** \n
+          _7ème H:_ **${schedule.hour7 ? schedule.hour7 : "*"}** \n
+          _8ème H:_ **${schedule.hour8 ? schedule.hour8 : "*"}**`
+        )
+
+      message.channel.send(classementEmbed);
     })
     .catch(error => console.log(`Error: ${error}`.red));
 

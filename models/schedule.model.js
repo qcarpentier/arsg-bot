@@ -6,7 +6,6 @@ const scheduleSchema = new Schema(
   {
     grade: {
       type: String,
-      unique: true,
       required: true
     },
     day: {
