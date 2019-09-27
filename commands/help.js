@@ -1,8 +1,6 @@
 const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
-
-
   // Build the Help Rich Embed
   const helpEmbed = new Discord.RichEmbed()
     .setTitle("Besoin d'aide? Vous pouvez toujours compter sur **l'ARSG Bot!**")
@@ -15,6 +13,14 @@ module.exports.run = async (bot, message, args) => {
     .addField(
       "`!sethomework <type> <date> <cours> <description>`",
       "Crée et épingle **un devoir, une interro, une prépa, un examen** ainsi que sa description. (uniquement dans le channel #homework)"
+    )
+    .addField(
+      "`!setschedule <jour> <H + heure> <cours>`",
+      "Ajoute ton **horaire** pour n'importe quel jour **de la semaine** ainsi que l'heure de cours et le cours pour que **toute ta classe** puissent le voir !"
+    )
+    .addField(
+      "`!schedule <jour>`",
+      "Visualise **ton horaire** de cours ! "
     )
     .addField(
       "`!markdown`",
