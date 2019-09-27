@@ -118,7 +118,7 @@ bot.on("messageReactionRemove", (reaction, user) => {
 // Runs whenever a message is received
 bot.on("message", message => {
   if (!message.member) return;
-  
+
   const member = message.member.displayName;
 
   // Remove the prefix to get the command name
@@ -156,9 +156,7 @@ bot.on("message", message => {
         });
 
         user.level = userLevel;
-        user
-          .save()
-          .catch(error => console.log(`Error: ${error}`.red));
+        user.save().catch(error => console.log(`Error: ${error}`.red));
       }
       // Create user if not existing
       else {
@@ -168,9 +166,7 @@ bot.on("message", message => {
 
         const newUser = new User({ username, messages, level });
 
-        newUser
-          .save()
-          .catch(error => console.log(`Error: ${error}`.red));
+        newUser.save().catch(error => console.log(`Error: ${error}`.red));
       }
     })
     .catch(error => console.log(`Error: ${error}`.red));
