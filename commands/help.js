@@ -1,8 +1,7 @@
 const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
-  // Delete the command message
-  message.delete();
+
 
   // Build the Help Rich Embed
   const helpEmbed = new Discord.RichEmbed()
@@ -32,6 +31,9 @@ module.exports.run = async (bot, message, args) => {
 
   // Send the Rich Embed as a private message to the user
   message.author.send(helpEmbed);
+
+  // Delete the command message
+  message.delete();
 };
 
 module.exports.config = {

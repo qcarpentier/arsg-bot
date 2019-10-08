@@ -1,39 +1,86 @@
 const Discord = require("discord.js");
+
 module.exports.run = async (bot, message, args) => {
-  if (args.length <= 1) {
-    let errorembed = new Discord.RichEmbed()
-      .setColor("e74c3c") // Generate random color
-      .setTitle("~ Erreur, paramêtres manquants")
-      .setDescription('Vous devez spécifier **deux** paramètre pour la commande **!setactivity**')
-      .setTimestamp(new Date()) //Get date
-      .setFooter(`Exception levée par ${message.author.tag}`);
-    return message.channel.send(errorembed);
+  // Get Administrator role
+  const administratorRole = message.guild.roles.find(
+    role => role.name === "Administrator"
+  );
+  // Get Moderator role
+  const moderatorRole = message.guild.roles.find(
+    role => role.name === "Moderator"
+  );
+
+  // Set an Error RichEmbed
+  const setEmbed = (title, description = "") => {
+    const errorEmbed = new Discord.RichEmbed()
+      .setColor("RANDOM")
+      .setTitle(title)
+      .setDescription(description)
+      .setTimestamp(new Date());
+    return errorEmbed;
+  };
+
+  const member = message.member;
+  const author = message.author;
+
+  // Delete the command message
+  message.delete();
+
+  // Verify if sender has Administrator or Moderator role
+  if (
+    !member.roles.has(administratorRole.id) &&
+    !member.roles.has(moderatorRole.id)
+  ) {
+    const errorEmbed = setEmbed(
+      "Vous n'avez pas le droit d'effectuer cette commande.",
+      ""
+    );
+    return author.send(errorEmbed);
   }
-  else
-  { // Type possible : Streaming, Listening, Watching, Playing
-    if (args[1].length === 0) { args[1] = "playing" } //Exception fix (Cannot read property 'length' of undefined)
-    args[1] = args[1].toLowerCase()
-    if (args[1] === "playing" || args[1] === "streaming" || args[1] === "listening" || args[1] === "watching") {
-      let activityembed = new Discord.RichEmbed()
-        .setColor("0x0080ff") // Generate random color
-        .setTitle("~ Changement de l\'activité du bot")
-        .setDescription('Bot activity **=>** ' + args[0] + '; Type => ' + '**' + args[1].toUpperCase() + '**')
-        .setTimestamp(new Date()) //Get date
-        .setFooter(`Demandé par ${message.author.tag}`);
-      let typeactivity = args[1].toUpperCase()
-      bot.user.setActivity(args, { type: typeactivity });
-      return message.channel.send(activityembed);
+
+  if (args.length <= 1) {
+    const errorEmbed = setEmbed(
+      "Erreur: la commande `!setactivity` a besoin de **deux paramètres**.",
+      "Exemple: `!setactivity watching youtube`"
+    );
+    return message.author.send(errorEmbed);
+  } else {
+    // Activity type should be "PLAYING", "STREAMING", "LISTENING" or "WATCHING"
+    const activityType = args[0].toUpperCase();
+
+    // Remove the activity type from args
+    args.shift();
+
+    // Capitalize each letter from the args
+    for (let i = 0; i < args.length; i++) {
+      args[i] = args[i].charAt(0).toUpperCase() + args[i].substr(1);
     }
-    else {
-      let activityembed = new Discord.RichEmbed()
-        .setColor("0x0080ff") // Generate random color
-        .setTitle("~ Changement de l\'activité du bot")
-        .setDescription('Bot activity **=>** ' + args[0] + ' ; Type => **PLAYING**')
-        .setTimestamp(new Date()) //Get date
-        .setFooter(`Demandé par ${message.author.tag}`);
-      let typeactivity = "PLAYING"
-      bot.user.setActivity(args, { type: typeactivity });
-      return message.channel.send(activityembed);
+
+    // Get a string from the args array
+    const activity = args.join(" ");
+
+    if (
+      activityType != "PLAYING" &&
+      activityType != "STREAMING" &&
+      activityType != "LISTENING" &&
+      activityType != "WATCHING"
+    ) {
+      const errorEmbed = setEmbed(
+        "Erreur: le type d'activité n'est pas reconnu.",
+        "Les types d'activité de la commande `!setactivity` sont:" +
+          "\n• PLAYING\n• STREAMING\n• LISTENING\n• WATCHING" +
+          "\n\nExemple: `!setactivity watching YouTube`"
+      );
+
+      return message.author.send(errorEmbed);
+    } else {
+      const activityEmbed = setEmbed(
+        "Changement de l'activité du bot",
+        `Type: **${activityType}** - Activité: **${activity}** `
+      );
+
+      bot.user.setActivity(activity, { type: activityType });
+      return message.author.send(activityEmbed);
     }
   }
 };

@@ -1,12 +1,16 @@
 module.exports.run = async (bot, message, args) => {
-  // Get contributore role
-  const contributorRole = message.guild.roles.find(
-    role => role.name === "Contributor"
+  // Get administrator role
+  const administratorRole = message.guild.roles.find(
+    role => role.name === "Administrator"
+  );
+  // Get moderator role
+  const moderatorRole = message.guild.roles.find(
+    role => role.name === "Moderator"
   );
   const channel = message.channel;
 
   // Verify if sender has contributor role
-  if (message.member.roles.has(contributorRole.id)) {
+  if (message.member.roles.has(administratorRole.id) || message.member.roles.has(moderatorRole.id)) {
     // Delete the command message
     message.delete();
 
@@ -19,6 +23,9 @@ module.exports.run = async (bot, message, args) => {
   } else {
     channel.send("Vous n'avez pas le droit d'utiliser cette commande.");
   }
+
+  // Delete the command message
+  message.delete();
 };
 
 module.exports.config = {

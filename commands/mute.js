@@ -10,16 +10,18 @@ module.exports.run = async (bot, message, args) => {
   const moderatorRole = message.guild.roles.find(
     role => role.name === "Moderator"
   );
+
   // Set an Error RichEmbed
-  const setError = message => {
+  const setError = msg => {
     const memberName = member.displayName;
-    let errorEmbed = new Discord.RichEmbed()
+    const errorEmbed = new Discord.RichEmbed()
       .setColor("e74c3c")
-      .setTitle(`Erreur: ${message}`)
-      .setTimestamp(new Date()) // Get date
+      .setTitle(`Erreur: ${msg}`)
+      .setTimestamp(new Date())
       .setFooter(`Exception enregistrée par ${memberName}`);
     return errorEmbed;
   };
+
   const member = message.member;
   const author = message.author;
   const hourRegex = /^\d+(\.\d+)?$/;
@@ -63,8 +65,9 @@ module.exports.run = async (bot, message, args) => {
     }
 
     setTimeout(() => {
-      if (memberToBeMuted.roles.has(mutedRole.id))
+      if (memberToBeMuted.roles.has(mutedRole.id)) {
         memberToBeMuted.removeRole(mutedRole.id);
+      }
     }, args[1] * 60 * 60 * 1000);
   }
 };

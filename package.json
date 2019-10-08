@@ -13,6 +13,7 @@
     "discord.js": "^11.4.2",
     "dotenv": "^6.1.0",
     "moment": "^2.22.2",
+    "mongoose": "^5.7.1",
     "mysql": "^2.16.0"
   },
   "devDependencies": {

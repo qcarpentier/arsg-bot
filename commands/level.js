@@ -1,49 +1,46 @@
+const Discord = require("discord.js");
+const User = require("../models/user.model");
+
 module.exports.run = async (bot, message, args) => {
-
   const channel = message.channel;
-  const author = message.member;
-  const author_alias = message.member.user.username;
+  const member = message.member.displayName;
 
-  let level;
+  const levelXp = [
+    0,
+    1000,
+    3000,
+    6000,
+    10000,
+    15000,
+    21000,
+    28000,
+    36000,
+    45000
+  ];
 
-  const mysql = require('mysql');
+  User.findOne({ username: member }).then(user => {
+    if (user) {
+      const totalXp = user.messages * 10;
+      let levelUpXp;
 
-  const connection = mysql.createConnection({
-    host: process.env.HOST,
-    user: process.env.USER,
-    password: process.env.PASSWORD,
-    database: process.env.DB
-  });
-
-  // Connect to DB
-  connection.connect((err) => {
-    if(err) {
-      console.log('DB Error'.red);
-    }
-  });
-
-  // Get info about user
-  connection.query(`SELECT * FROM users WHERE username = '${author.toString()}'`, (err, rows, fields) => {
-    
-    if (err) throw err;
-
-    if(rows[0]) {
-      channel.send(`${author} est level ${rows[0].level} !`);
-    } else {
-      
-      // Create new user if doesn't exist
-      connection.query(`INSERT INTO users (username, alias) VALUES ('${author.toString()}', '${author_alias}')`, (err, result) => {
-
-        if (err) throw err;
-
-        channel.send(`${author} est level 1`);
-
+      levelXp.some((level) => {
+        if (totalXp <= level) {
+          return levelUpXp = level - totalXp;
+        }
       });
 
+      const levelEmbed = new Discord.RichEmbed()
+        .setTitle(`${member} est level ${user.level} !`)
+        .setColor("RANDOM")
+        .setDescription(`Plus que ${levelUpXp}XP pour level up!`)
+        .setFooter(`Demandé par ${message.member.displayName}`);
+
+      channel.send(levelEmbed);
     }
-
   });
-
+  
+  // Delete the command message
+  message.delete();
 };
 
 module.exports.config = {

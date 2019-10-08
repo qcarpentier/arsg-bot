@@ -1,9 +1,6 @@
 const Discord = require("discord.js");
 
 module.exports.run = async (bot, message, args) => {
-  // Delete the command message
-  message.delete();
-
   // Build the Markdown Rich Embed
   const markdownEmbed = new Discord.RichEmbed()
     .setTitle("Donnez un peu de vie à vos conversations quotidiennes!")
@@ -22,14 +19,23 @@ module.exports.run = async (bot, message, args) => {
     )
     .addField("__souligné__", "`__souligné__`")
     .addField("~~barré~~", "`~~barré~~`")
-    .addField("`code`", "`` `code` ``")
+    .addField("||spoilers||", "`||spoilers||`")
+    .addField("`code`", "` ``code`` `")
     .addField(
       "```bloc \nde code \nde plusieurs lignes```",
-      "` ```bloc \nde code \nde plusieurs lignes``` `"
+      "` ````bloc \nde code \nde plusieurs lignes```` `"
+    )
+    .addField("> Une ligne de block quote", "`> Une ligne de block quote`")
+    .addField(
+      ">>> Plusieurs \nlignes \nde block quote",
+      "`>>> Plusieurs \nlignes \nde block quote`"
     );
 
   // Send the Rich Embed as a private message to the user
   message.author.send(markdownEmbed);
+
+  // Delete the command message
+  message.delete();
 };
 
 module.exports.config = {
