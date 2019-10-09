@@ -31,9 +31,7 @@ module.exports.run = async (bot, message, args) => {
 
   // Check for homeworks for all channels
   for (const channelName of channelNames) {
-    const channel = bot.channels.find(
-      chan => chan.name === channelName
-    );
+    const channel = bot.channels.find(chan => chan.name === channelName);
 
     channel
       .fetchMessages()
@@ -56,10 +54,23 @@ module.exports.run = async (bot, message, args) => {
               content.day + 1
             );
 
-            console.log(homeworkDate);
+            // console.log(homeworkDate.yellow);
 
             if (today >= homeworkDate) {
-              msg.delete();
+              console.log(`Homework color changed: ${homeworkDate}`.green);
+              console.log(embed.title);
+              
+
+              const title = `✅ ${embed.title.substr(2)}`;
+              
+              msg.edit({
+                embed: {
+                  title: title,
+                  description: embed.description,
+                  color: "3066993",
+                  footer: { text: embed.footer.text }
+                }
+              });
             }
           });
         })

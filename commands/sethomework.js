@@ -98,11 +98,11 @@ module.exports.run = async (bot, message, args) => {
 
   // Build the Homework Rich Embed
   const homeworkEmbed = new Discord.RichEmbed()
-    .setTitle(`${type} en ${subject}`)
+    .setTitle(`🕒 ${type} en ${subject}`)
     .setDescription(
       `Pour le: ${homeworkDay} ${homeworkMonth} ${homeworkYear}\nDescription: ${description}\n\nClasse: ${grade}`
     )
-    .setColor("#F8F096")
+    .setColor("#FFA500")
     .setFooter(
       `Créé par ${message.member.displayName} le ${currentDateFormat}`
     );
