@@ -17,8 +17,8 @@ module.exports.run = async (bot, message, args) => {
   }
 
   //  Fetch student roles
+  const grade3BTTrI = message.guild.roles.find(role => role.name === "3B");
   const grade3DTTrI = message.guild.roles.find(role => role.name === "3D");
-  const grade3ETTrI = message.guild.roles.find(role => role.name === "3E");
   const grade4TTrI = message.guild.roles.find(role => role.name === "4TTrI");
   const grade5TTrI = message.guild.roles.find(role => role.name === "5TTrI");
   const grade6TTrI = message.guild.roles.find(role => role.name === "6TTrI");
@@ -28,14 +28,15 @@ module.exports.run = async (bot, message, args) => {
   let gradeEmoji;
   let letterEmoji;
 
-  if (message.member.roles.has(grade3DTTrI.id)) {
+  if (message.member.roles.has(grade3BTTrI.id)) {
+    grade = "3B";
+    gradeEmoji = "\u0033\u20E3";
+    letterEmoji = "\uD83C\uDDE7";
+    
+  } else if (message.member.roles.has(grade3DTTrI.id)) {
     grade = "3D";
     gradeEmoji = "\u0033\u20E3";
     letterEmoji = "\uD83C\uDDE9";
-  } else if (message.member.roles.has(grade3ETTrI.id)) {
-    grade = "3E";
-    gradeEmoji = "\u0033\u20E3";
-    letterEmoji = "\uD83C\uDDEA";
   } else if (message.member.roles.has(grade4TTrI.id)) {
     grade = "4TTrI";
   } else if (message.member.roles.has(grade5TTrI.id)) {
