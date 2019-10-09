@@ -66,6 +66,77 @@ bot.on("ready", () => {
   bot.channels.find(channel => channel.name === "read-me").fetchMessages();
 });
 
+// Check homeworks every 24 hours automatically
+// TODO: move it to /utils
+setInterval(() => {
+  // Homework month
+  const monthNames = [
+    "Janvier",
+    "Février",
+    "Mars",
+    "Avril",
+    "Mai",
+    "Juin",
+    "Juillet",
+    "Août",
+    "Septembre",
+    "Octobre",
+    "Novembre",
+    "Décembre"
+  ];
+
+  const channelNames = [
+    "3ttri-homework",
+    "4ttri-homework",
+    "5ttri-homework",
+    "6ttri-homework",
+    "bot-homework"
+  ];
+
+  // Check for homeworks for all channels
+  for (const channelName of channelNames) {
+    const channel = bot.channels.find(chan => chan.name === channelName);
+
+    channel
+      .fetchMessages()
+      .then(channelMessages =>
+        channelMessages.forEach(msg => {
+          msg.embeds.forEach(embed => {
+            const today = new Date();
+
+            // Fetch and build the homework date
+            const contentSpliter = embed.description.split(" ");
+            const content = {
+              day: parseInt(contentSpliter[2]),
+              month: parseInt(monthNames.indexOf(contentSpliter[3]) + 1),
+              year: parseInt(contentSpliter[4])
+            };
+
+            const homeworkDate = new Date(
+              content.year,
+              content.month - 1,
+              content.day + 1
+            );
+
+            if (today >= homeworkDate) {
+              const title = `✅ ${embed.title.substr(2)}`;
+
+              msg.edit({
+                embed: {
+                  title: title,
+                  description: embed.description,
+                  color: "3066993",
+                  footer: { text: embed.footer.text }
+                }
+              });
+            }
+          });
+        })
+      )
+      .catch(err => console.log(err.red));
+  }
+}, 1000 * 60 * 60 * 24);
+
 // Runs whenever a new user is added to the server
 bot.on("guildMemberAdd", member => {
   // Assign automatically the 'Guest' role.

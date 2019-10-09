@@ -26,7 +26,8 @@ module.exports.run = async (bot, message, args) => {
     "3ttri-homework",
     "4ttri-homework",
     "5ttri-homework",
-    "6ttri-homework"
+    "6ttri-homework",
+    "bot-homework"
   ];
 
   // Check for homeworks for all channels
@@ -57,10 +58,6 @@ module.exports.run = async (bot, message, args) => {
             // console.log(homeworkDate.yellow);
 
             if (today >= homeworkDate) {
-              console.log(`Homework color changed: ${homeworkDate}`.green);
-              console.log(embed.title);
-              
-
               const title = `✅ ${embed.title.substr(2)}`;
               
               msg.edit({
